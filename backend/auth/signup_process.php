@@ -21,8 +21,9 @@ $contact_number = $_POST['contact_number'];
 $password = $_POST['password'];
 
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+$terms_agreement = isset($_POST['terms_agreement']) ? 1 : 0; 
 
-$sql = "INSERT INTO users (name, email, contact_number, password) VALUES ('$name', '$email', '$contact_number', '$hashed_password')";
+$sql = "INSERT INTO users (name, email, contact_number, password, terms_agreement) VALUES ('$name', '$email', '$contact_number', '$hashed_password', '$terms_agreement')";
 
 if (mysqli_query($conn, $sql)) {
     // User registration successful, redirect to login page
