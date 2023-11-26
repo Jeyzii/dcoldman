@@ -27,6 +27,12 @@ if (isset($_SESSION["user_id"])) {
             echo '<div class="alert alert-danger" role="alert">' . $_SESSION["error_message"] . '</div>';
             unset($_SESSION["error_message"]);
         }
+
+        // Display success message if set in the session
+        if (isset($_SESSION["success_message"])) {
+            echo '<div class="alert alert-success" role="alert">' . $_SESSION["success_message"] . '</div>';
+            unset($_SESSION["success_message"]);
+        }
         ?>
 
         <form action="backend/auth/login_process.php" method="post">
