@@ -46,13 +46,14 @@ $offset = ($page - 1) * $recordsPerPage;
 
                 if ($canceledBookingsResult && mysqli_num_rows($canceledBookingsResult) > 0) {
                     echo '<table class="table">';
-                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th></tr></thead>';
+                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Client Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th></tr></thead>';
                     echo '<tbody>';
 
                     while ($canceledBooking = mysqli_fetch_assoc($canceledBookingsResult)) {
                         echo '<tr>';
                         echo '<td>' . $canceledBooking['booking_id'] . '</td>';
                         echo '<td>' . $canceledBooking['booker_name'] . '</td>';
+                        echo '<td>' . $canceledBooking['client_name'] . '</td>';
                         echo '<td>' . $canceledBooking['service_type'] . '</td>';
                         echo '<td>' . $canceledBooking['address'] . '</td>';
                         echo '<td>' . $canceledBooking['booking_date'] . '</td>';

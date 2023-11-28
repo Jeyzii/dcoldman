@@ -45,13 +45,14 @@ $offset = ($page - 1) * $recordsPerPage;
 
                 if ($approvedBookingsResult && mysqli_num_rows($approvedBookingsResult) > 0) {
                     echo '<table class="table">';
-                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>';
+                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Client Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>';
                     echo '<tbody>';
 
                     while ($approvedBooking = mysqli_fetch_assoc($approvedBookingsResult)) {
                         echo '<tr>';
                         echo '<td>' . $approvedBooking['booking_id'] . '</td>';
                         echo '<td>' . $approvedBooking['booker_name'] . '</td>';
+                        echo '<td>' . $approvedBooking['client_name'] . '</td>';
                         echo '<td>' . $approvedBooking['service_type'] . '</td>';
                         echo '<td>' . $approvedBooking['address'] . '</td>';
                         echo '<td>' . $approvedBooking['booking_date'] . '</td>';

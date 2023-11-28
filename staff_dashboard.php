@@ -27,7 +27,24 @@ require 'includes/staff_auth.php';
                 <h2>Staff Dashboard</h2>
                 <!-- Display information from the database -->
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-users"></i> Total Users</h5>
+                                <?php
+                                $userCountQuery = "SELECT COUNT(*) AS user_count FROM users";
+                                $userCountResult = mysqli_query($conn, $userCountQuery);
 
+                                if ($userCountResult) {
+                                    $userCount = mysqli_fetch_assoc($userCountResult)['user_count'];
+                                    echo "<p class='card-text'>$userCount</p>";
+                                } else {
+                                    echo "Error fetching user information.";
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">

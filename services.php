@@ -55,7 +55,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-01-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">AC Installation</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">AC Installation</a>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-02-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">Cooling Services</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">Cooling Services</a>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-03-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">Heating Services</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">Heating Services</a>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-04-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">Maintenance & Repair</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">Maintenance & Repair</a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-05-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">Indoor Air Quality</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">Indoor Air Quality</a>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                             <div class="service-icon flex-shrink-0 bg-primary">
                                 <img class="img-fluid" src="img/icon/icon-06-light.png" alt="">
                             </div>
-                            <a class="h4 mx-4 mb-0" a href="booking.html">Annual Inspections</a>
+                            <a class="h4 mx-4 mb-0" a href="book_a_service.php">Annual Inspections</a>
                         </div>
                     </div>
                 </div>

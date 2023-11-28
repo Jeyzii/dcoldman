@@ -14,7 +14,7 @@ require '../includes/database.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve user input
     $user_id = $_SESSION["user_id"];
-    $client_name = isset($_SESSION["name"]) ? $_SESSION["name"] : ""; // Check if the "name" key is set
+    $client_name = $_POST["client_name"];
     $booking_date = $_POST["booking_date"];
     $booking_time = $_POST["booking_time"];
     $service_type = $_POST["service_type"];
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($existingBookingResult) > 0) {
             // Booking already exists for the selected service at the same time and date
             $_SESSION['error'] = "You have already booked the selected service at the same time and date.";
-            header("Location: ../book_a_service.php");
+            header("Location: ../admin_book_a_service.php");
             exit;
         } else {
             // Insert booking data into the database
@@ -70,19 +70,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($result) {
                 // Booking successful
                 $_SESSION['success'] = "Booking added successfully.";
-                header("Location: ../user_dashboard.php"); // Redirect to the user's dashboard
+                header("Location: ../admin_pending_bookings_management.php"); // Redirect to the user's dashboard
                 exit;
             } else {
                 // Error in the query
                 $_SESSION['error'] = "Error adding booking: " . mysqli_error($conn);
-                header("Location: ../book_a_service.php");
+                header("Location: ../admin_book_a_service.php");
                 exit;
             }
         }
     } else {
         // Display validation errors
         $_SESSION['error'] = implode("<br>", $errors);
-        header("Location: ../book_a_service.php");
+        header("Location: ../admin_book_a_service.php");
         exit;
     }
 

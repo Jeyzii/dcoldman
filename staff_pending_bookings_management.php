@@ -35,6 +35,10 @@ $offset = ($page - 1) * $recordsPerPage;
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Pending Bookings and Validation Controls -->
                 <h3>Pending Bookings</h3>
+                <!-- Book a Service Button -->
+                <div class="mb-3">
+                    <a href="staff_book_a_service.php" class="btn btn-primary">Book a Service</a>
+                </div>
                 <?php
                 // Fetch pending bookings with user information
                 $pendingBookingsQuery = "SELECT bookings.*, users.name AS booker_name FROM bookings 
@@ -45,13 +49,14 @@ $offset = ($page - 1) * $recordsPerPage;
 
                 if ($pendingBookingsResult && mysqli_num_rows($pendingBookingsResult) > 0) {
                     echo '<table class="table">';
-                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>';
+                    echo '<thead><tr><th>ID</th><th>Booker Name</th><th>Client Name</th><th>Service Type</th><th>Location</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>';
                     echo '<tbody>';
 
                     while ($pendingBooking = mysqli_fetch_assoc($pendingBookingsResult)) {
                         echo '<tr>';
                         echo '<td>' . $pendingBooking['booking_id'] . '</td>';
                         echo '<td>' . $pendingBooking['booker_name'] . '</td>';
+                        echo '<td>' . $pendingBooking['client_name'] . '</td>';
                         echo '<td>' . $pendingBooking['service_type'] . '</td>';
                         echo '<td>' . $pendingBooking['address'] . '</td>';
                         echo '<td>' . $pendingBooking['booking_date'] . '</td>';
