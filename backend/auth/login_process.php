@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["email"] = $user["email"];
                 $_SESSION["name"] = $user["name"];
                 $_SESSION["role"] = $user["role"];
+                $_SESSION["availability"] = $user["availability"];
 
                 // Redirect to a dashboard or home page
                 header("Location: ../../index.php");

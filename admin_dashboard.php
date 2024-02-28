@@ -20,10 +20,10 @@ require 'includes/admin_auth.php';
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            <!-- Sidebar -->    
             <?php include("includes/admin_sidebar.php"); ?>
             <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 20px;">
                 <h2>Admin Dashboard</h2>
                 <!-- Display information from the database -->
                 <div class="row">

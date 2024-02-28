@@ -25,20 +25,32 @@
                     ' . $_SESSION["name"] . '
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">';
-
+        
             // Display dashboard link based on the user's role
-            switch ($_SESSION["role"]) {
-                case 'admin':
-                    echo '<li><a class="dropdown-item" href="admin_dashboard.php">Dashboard</a></li>';
-                    break;
-                case 'staff':
-                    echo '<li><a class="dropdown-item" href="staff_dashboard.php">Dashboard</a></li>';
-                    break;
-                default:
-                    echo '<li><a class="dropdown-item" href="user_dashboard.php">Dashboard</a></li>';
-                    break;
+            if (isset($_SESSION["role"])) {
+                switch ($_SESSION["role"]) {
+                    case 'admin':
+                        echo '<li><a class="dropdown-item" href="admin_dashboard.php">Dashboard</a></li>';
+                        break;
+                        case 'manpower':
+                            echo '<form action="backend/update_availability.php" method="post">
+                                    <input type="hidden" name="user_id" value="' . $_SESSION['user_id'] . '">
+                                    <button type="submit" name="toggle_availability" class="btn btn-sm ' . ($_SESSION['availability'] == 1 ? 'btn-success' : 'btn-danger') . '">
+                                        ' . ($_SESSION['availability'] == 1 ? 'Available' : 'Not Available') . '
+                                    </button>
+                                    </form>';
+                            echo '<li><a class="dropdown-item" href="">Dashboard</a></li>';
+                            break;
+                        
+                    case 'staff':
+                        echo '<li><a class="dropdown-item" href="staff_dashboard.php">Dashboard</a></li>';
+                        break;
+                    default:
+                        echo '<li><a class="dropdown-item" href="user_dashboard.php">Dashboard</a></li>';
+                        break;
+                }
             }
-
+        
             // Common links for all roles
             echo '
                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
