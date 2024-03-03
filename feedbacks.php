@@ -98,11 +98,6 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                                 <h5><?= $feedback['name'] ?></h5>
                                 <hr>
                                 <p class="fs-5"><?= $feedback['feedback'] ?></p>
-
-                                <?php if ($loggedIn && $user_id == $feedback['feedback_author_id']) : ?>
-                                    <button type="button" class="btn btn-sm btn-secondary">Edit</button>
-                                <?php endif; ?>
-                                
                             </div>
                         <?php endforeach; ?>
                     </div>
