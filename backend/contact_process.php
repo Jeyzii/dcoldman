@@ -10,11 +10,9 @@ use PHPMailer\PHPMailer\SMTP;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $name = $_POST["name"];
-    $email = $_POST["email"];
+    $emailAdd = $_POST["emailAdd"];
     $subject = $_POST["subject"];
     $message = $_POST["message"];
-
-    var_dump($name, $email, $subject, $message);
 
     // Validate form data
     $errors = [];
@@ -23,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Name is required.";
     }
 
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (empty($emailAdd) || !filter_var($emailAdd, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Valid email address is required.";
     }
 
@@ -47,15 +45,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Configure PHPMailer for SMTP
+        //mailtrap
+        // $mail->isSMTP();
+        // $mail->Host = 'sandbox.smtp.mailtrap.io';
+        // $mail->SMTPAuth = true;
+        // $mail->Port = 2525;
+        // $mail->Username = '0d0f86699ebb20';
+        // $mail->Password = '21f305b79f60a1';
+
+        //gmail
         $mail->isSMTP();
-        $mail->Host = 'sandbox.smtp.mailtrap.io';
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Port = 2525;
-        $mail->Username = '0d0f86699ebb20';
-        $mail->Password = '21f305b79f60a1';
+        $mail->Port = 587 ;
+        $mail->Username = 'dcoldmandcdv@gmail.com';
+        $mail->Password = 'mffr qibt bkgb fdco';
+        $mail->isHTML(true);
 
         // Set sender and recipient
-        $mail->setFrom($email, $name);
+        $mail->setFrom($emailAdd, $name);
         $mail->addAddress("dcoldmandcdv@gmail.com", "Dcoldman");
 
         // Set email subject and body

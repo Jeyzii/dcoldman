@@ -68,8 +68,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Your Email">
-                                    <label for="email" id="email">Your Email</label>
+                                    <input type="email" class="form-control" id="emailAdd" name="emailAdd" placeholder="Your Email">
+                                    <label for="emailAddL" id="emailAddL">Your Email</label>
                                 </div>
                             </div>
                             <div class="col-12">
