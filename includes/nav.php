@@ -15,6 +15,7 @@
 
             <a href="contact.php" class="nav-item nav-link">Contact Us</a>
         </div>
+
         <div class="h-100 d-lg-inline-flex align-items-center">
         <?php
         // Check if the user is logged in
@@ -25,6 +26,8 @@
                     ' . $_SESSION["name"] . '
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">';
+
+        // var_dump($_SESSION['availability']);
         
             // Display dashboard link based on the user's role
             if (isset($_SESSION["role"])) {
@@ -32,15 +35,17 @@
                     case 'admin':
                         echo '<li><a class="dropdown-item" href="admin_dashboard.php">Dashboard</a></li>';
                         break;
-                        case 'manpower':
-                            echo '<form action="backend/update_availability.php" method="post">
-                                    <input type="hidden" name="user_id" value="' . $_SESSION['user_id'] . '">
-                                    <button type="submit" name="toggle_availability" class="btn btn-sm ' . ($_SESSION['availability'] == 1 ? 'btn-success' : 'btn-danger') . '">
-                                        ' . ($_SESSION['availability'] == 1 ? 'Available' : 'Not Available') . '
-                                    </button>
-                                    </form>';
-                            echo '<li><a class="dropdown-item" href="">Dashboard</a></li>';
-                            break;
+                    case 'manpower':
+                        echo '<li><a class="dropdown-item" >Manpower Availability: </a></li>';
+                        echo '<form action="backend/update_availability.php" method="post">
+                                <input type="hidden" name="user_id" value="' . $_SESSION['user_id'] . '">
+                                <button type="submit" name="toggle_availability" class="dropdown-item ' . ($_SESSION['availability'] == 1 ? 'btn-success' : 'btn-danger') . '">
+                                    ' . ($_SESSION['availability'] == 1 ? 'Available' : 'Not Available') . '
+                                </button>
+                            </form><hr>';
+
+                        echo '<li><a class="dropdown-item" href="manpower_dashboard.php">Dashboard</a></li>';
+                        break;
                         
                     case 'staff':
                         echo '<li><a class="dropdown-item" href="staff_dashboard.php">Dashboard</a></li>';

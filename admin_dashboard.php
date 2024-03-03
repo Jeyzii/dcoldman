@@ -81,6 +81,24 @@ require 'includes/admin_auth.php';
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
+                                <?php
+                                $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                                $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
+
+                                if ($availableManpowerCountResult) {
+                                    $availableManpowerCount = mysqli_fetch_assoc($availableManpowerCountResult)['available_manpower_count'];
+                                    echo "<p class='card-text'>$availableManpowerCount</p>";
+                                } else {
+                                    echo "Error fetching available manpower information.";
+                                }
+                                ?>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </main>
         </div>

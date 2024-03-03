@@ -23,3 +23,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Booking Stylesheet -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+    /* for manpower availability button */
+    .btn-success {
+        background-color: green;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: red;
+        color: white;
+    }
+    </style>
