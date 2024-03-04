@@ -2,8 +2,8 @@
 session_start();
 include("includes/database.php");
 
-// Check if the user is logged in
-if (!isset($_SESSION["user_id"])) {
+// Check if the user is logged in and has otp_status = 1
+if (!isset($_SESSION["user_id"]) || !isset($_SESSION["otp_status"]) || $_SESSION["otp_status"] != 1) {
     $loggedIn = false;
 } else {
     $loggedIn = true;
@@ -44,7 +44,6 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>Feedbacks</title>

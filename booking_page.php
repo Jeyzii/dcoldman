@@ -44,12 +44,12 @@ session_start();
                 <div class="bg-light text-center p-5">
                     <h1 class="mb-4">Book For A Service</h1>
                     <?php
-                    // Check if the user is logged in
-                    if (isset($_SESSION["user_id"])) {
-                        // User is logged in, show the "Book Now" button
+                    // Check if the user is logged in and has otp_status = 1
+                    if (isset($_SESSION["user_id"]) && isset($_SESSION["otp_status"]) && $_SESSION["otp_status"] == 1) {
+                        // User is logged in and has otp_status = 1, show the "Book Now" button
                         echo '<a href="book_a_service.php" class="btn btn-primary w-100 py-3" type="submit">Book Now</a>';
                     } else {
-                        // User is not logged in, provide a message or redirect to the login page
+                        // User is not logged in or otp_status is not 1, provide a message or redirect to the login page
                         echo '<p>Please <a href="login.php">login</a> to book a service.</p>';
                     }
                     ?>

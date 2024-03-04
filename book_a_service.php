@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-// Check if the admin is logged in
-if (!isset($_SESSION["user_id"])) {
+// Check if the user is logged in and has otp_status = 1
+if (!isset($_SESSION["user_id"]) || !isset($_SESSION["otp_status"]) || $_SESSION["otp_status"] != 1) {
+    // Redirect to the login page if not logged in or otp_status is not 1
     header("Location: login.php");
     exit;
 }
