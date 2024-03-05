@@ -20,10 +20,10 @@ require 'includes/admin_auth.php';
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            <!-- Sidebar -->    
             <?php include("includes/admin_sidebar.php"); ?>
             <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-bottom: 20px;">
                 <h2>Admin Dashboard</h2>
                 <!-- Display information from the database -->
                 <div class="row">
@@ -81,6 +81,24 @@ require 'includes/admin_auth.php';
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
+                                <?php
+                                $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                                $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
+
+                                if ($availableManpowerCountResult) {
+                                    $availableManpowerCount = mysqli_fetch_assoc($availableManpowerCountResult)['available_manpower_count'];
+                                    echo "<p class='card-text'>$availableManpowerCount</p>";
+                                } else {
+                                    echo "Error fetching available manpower information.";
+                                }
+                                ?>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </main>
         </div>

@@ -39,6 +39,18 @@ $offset = ($page - 1) * $recordsPerPage;
                 <div class="mb-3">
                     <a href="admin_book_a_service.php" class="btn btn-primary">Book a Service</a>
                 </div>
+
+                    <!-- Display success message if any -->
+                <?php
+                if (isset($_SESSION["success_message"])) {
+                    echo '<div class="alert alert-success" role="alert">' . $_SESSION["success_message"] . '</div>';
+                    unset($_SESSION["success_message"]);
+                }
+                    if (isset($_SESSION["error_message"])) {
+                    echo '<div class="alert alert-danger" role="alert">' . $_SESSION["error_message"] . '</div>';
+                    unset($_SESSION["error_message"]);
+                }
+                ?>
                 <?php
                 // Fetch pending bookings with user information
                 $pendingBookingsQuery = "SELECT bookings.*, users.name AS booker_name FROM bookings 
@@ -63,8 +75,10 @@ $offset = ($page - 1) * $recordsPerPage;
                         echo '<td>' . $pendingBooking['booking_time'] . '</td>';
                         echo '<td>
                         <a href="backend/admin_approve_booking_process.php?booking_id=' . $pendingBooking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
-                        <a href="backend/admin_reject_booking_process.php?booking_id=' . $pendingBooking['booking_id'] . '" class="btn btn-danger btn-sm">Reject</a>
+                        <a href="admin_resched_booking.php?booking_id=' . $pendingBooking['booking_id'] . '" class="btn btn-info btn-sm text-white">Resched</a>
                         </td>';
+                        // <a href="backend/admin_reject_booking_process.php?booking_id=' . $pendingBooking['booking_id'] . '" class="btn btn-danger btn-sm">Reject</a>
+
                         echo '</tr>';
                     }
 

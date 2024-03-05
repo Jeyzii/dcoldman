@@ -67,6 +67,7 @@ if (isset($_GET['user_id'])) {
                     <option value="user" <?php echo ($user['role'] == 'user') ? 'selected' : ''; ?>>User</option>
                     <option value="admin" <?php echo ($user['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
                     <option value="staff" <?php echo ($user['role'] == 'staff') ? 'selected' : ''; ?>>Staff</option>
+                    <option value="manpower" <?php echo ($user['role'] == 'manpower') ? 'selected' : ''; ?>>Manpower</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-warning">Save Changes</button>

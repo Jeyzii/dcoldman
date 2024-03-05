@@ -11,6 +11,11 @@
                     Services
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="staff_manpower_availability_tracker.php">
+                    Manpower Availability Tracker 
+                </a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="staff_bookings_management.php" role="button" id="bookingsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     Bookings

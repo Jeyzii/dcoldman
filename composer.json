@@ -1,0 +1,6 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "phpgangsta/googleauthenticator": "^5.0"
+    }
+}

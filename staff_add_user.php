@@ -58,6 +58,7 @@ if (!$services_result) {
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                     <option value="staff">Staff</option>
+                    <option value="staff">Manpower</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Add User</button>

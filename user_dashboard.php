@@ -89,15 +89,16 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
             <?php
             if ($pendingResult && mysqli_num_rows($pendingResult) > 0) {
                 echo '<table class="table">';
-                echo '<thead><tr><th>Date</th><th>Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Status</th></tr></thead>';
+                echo '<thead><tr><th style="width: 150px;">Date</th><th style="width: 150px;">Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Estimated Time of Arrival</th><th>Status</th></tr></thead>';
                 echo '<tbody>';
                 while ($booking = mysqli_fetch_assoc($pendingResult)) {
                     echo '<tr>';
                     echo '<td>' . $booking['booking_date'] . '</td>';
-                    echo '<td>' . $booking['booking_time'] . '</td>';
+                    echo '<td>' . date('h:i A', strtotime($booking['booking_time'])) . '</td>';
                     echo '<td>' . $booking['service_type'] . '</td>';
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
+                    echo '<td>' . $booking['eta'] . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
                     echo '</tr>';
                 }
@@ -118,7 +119,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
             <?php
             if ($approvedResult && mysqli_num_rows($approvedResult) > 0) {
                 echo '<table class="table">';
-                echo '<thead><tr><th>Date</th><th>Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Status</th></tr></thead>';
+                echo '<thead><tr><th>Date</th><th>Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Estimated Time of Arrival</th><th>Status</th></tr></thead>';
                 echo '<tbody>';
                 while ($booking = mysqli_fetch_assoc($approvedResult)) {
                     echo '<tr>';
@@ -127,6 +128,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['service_type'] . '</td>';
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
+                    echo '<td>' . $booking['eta'] . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
                     echo '</tr>';
                 }

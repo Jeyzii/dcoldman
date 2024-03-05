@@ -1,33 +1,83 @@
-TODO: need to configure your mail server check mailtrap
-
 <?php
 session_start();
 
+// Include PHPMailer
+require "../vendor/autoload.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $name = $_POST["name"];
-    $email = $_POST["email"];
+    $emailAdd = $_POST["emailAdd"];
     $subject = $_POST["subject"];
     $message = $_POST["message"];
 
-    // Validate form data (add more validation as needed)
-    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-        // Handle validation errors
-        $_SESSION["contact_error"] = "All fields are required.";
+    // Validate form data
+    $errors = [];
+
+    if (empty($name)) {
+        $errors[] = "Name is required.";
+    }
+
+    if (empty($emailAdd) || !filter_var($emailAdd, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Valid email address is required.";
+    }
+
+    if (empty($subject)) {
+        $errors[] = "Subject is required.";
+    }
+
+    if (empty($message)) {
+        $errors[] = "Message is required.";
+    }
+
+    // If there are validation errors, redirect back with error messages
+    if (!empty($errors)) {
+        $_SESSION["contact_error"] = implode(" ", $errors);
         header("Location: ../contact.php");
         exit;
     }
 
-    $to = "your-email@example.com"; // Replace with your email address
-    $headers = "From: $email";
-    $message_body = "Name: $name\nEmail: $email\nSubject: $subject\n\n$message";
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer();
 
-    if (mail($to, $subject, $message_body, $headers)) {
+    try {
+        // Configure PHPMailer for SMTP
+        //mailtrap
+        // $mail->isSMTP();
+        // $mail->Host = 'sandbox.smtp.mailtrap.io';
+        // $mail->SMTPAuth = true;
+        // $mail->Port = 2525;
+        // $mail->Username = '0d0f86699ebb20';
+        // $mail->Password = '21f305b79f60a1';
+
+        //gmail
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Port = 587 ;
+        $mail->Username = 'dcoldmandcdv@gmail.com';
+        $mail->Password = 'mffr qibt bkgb fdco';
+        $mail->isHTML(true);
+
+        // Set sender and recipient
+        $mail->setFrom($emailAdd, $name);
+        $mail->addAddress("dcoldmandcdv@gmail.com", "Dcoldman");
+
+        // Set email subject and body
+        $mail->Subject = $subject;
+        $mail->Body = $message;
+
+        // Send the email
+        $mail->send();
+
         // Email sent successfully
         $_SESSION["contact_success"] = "Your message has been sent successfully!";
         header("Location: ../contact.php");
         exit;
-    } else {
+    } catch (Exception $e) {
         // Error sending email
         $_SESSION["contact_error"] = "Oops! Something went wrong. Please try again later.";
         header("Location: ../contact.php");
