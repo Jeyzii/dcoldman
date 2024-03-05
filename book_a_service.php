@@ -30,7 +30,57 @@ if (!$services_result) {
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs&libraries=places" async></script>
     <?php include("includes/head.php"); ?>
+
+<style>
+    #map-container {
+        height: 300px; /* Adjust the height as needed */
+    }
+
+    /* Add some styles to make the search box look better */
+    .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 5px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+    }
+
+    #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+    }
+
+    .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+    }
+
+    .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+    }
+
+    #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 300px;
+    }
+
+    #pac-input:focus {
+        border-color: #4d90fe;
+    }
+</style>
 </head>
 
 <body>
@@ -47,11 +97,6 @@ if (!$services_result) {
         <div class="container text-center py-5">
             <h1 class="display-4 text-white animated slideInDown mb-4">Add Booking</h1>
             <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Admin</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Booking</li>
-                </ol>
             </nav>
         </div>
     </div>
@@ -98,21 +143,126 @@ if (!$services_result) {
                                     ?>
                                 </select>
                             </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="special_request" class="form-label">Special Request:</label>
+                                <textarea class="form-control" id="special_request" name="special_request" style="height: 17px;"></textarea>
+                            </div>
                             <div class="col-12">
                                 <label for="address" class="form-label">Address:</label>
-                                <textarea class="form-control" id="address" name="address" required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label for="special_request" class="form-label">Special Request:</label>
-                                <textarea class="form-control" id="special_request" name="special_request"></textarea>
+                                <!-- Search input for address -->
+                                <div id="pac-container">
+                                    <input id="pac-input" name="address" type="text" placeholder="Enter a location">
+                                </div>
+                                <!-- Map Container -->
+                                <div id="map-container"></div>
+                                <!-- Hidden Input for Storing Selected Location -->
+                                <input type="hidden" id="selected-location" name="selected_location" required>
                             </div>
                         </div>
+                        <br>
                         <button class="btn btn-primary w-100 py-3" type="submit">Add Booking</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+<!-- JavaScript to Initialize Google Maps Autocomplete and Search -->
+<script>
+function initMap() {
+    // Coordinates for Manila, Philippines
+    var manilaCoordinates = { lat: 14.6091, lng: 121.0223 };
+
+    var map = new google.maps.Map(document.getElementById('map-container'), {
+        center: manilaCoordinates,
+        zoom: 10 // Adjust the zoom level as needed
+    });
+
+    // Autocomplete for the address input
+    var input = document.getElementById('pac-input');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function () {
+        var place = autocomplete.getPlace();
+        var location = place.geometry.location;
+        document.getElementById('selected-location').value = location.lat() + ',' + location.lng();
+
+        // You can customize the map behavior when a location is selected, e.g., pan to the selected location
+        map.setCenter(location);
+        map.setZoom(15);
+    });
+
+    // Autocomplete for the search box
+    var searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+
+    map.addListener('bounds_changed', function () {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    var markers = [];
+
+    searchBox.addListener('places_changed', function () {
+        var places = searchBox.getPlaces();
+
+        if (places.length === 0) {
+            return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach(function (marker) {
+            marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name, and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function (place) {
+            if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+
+            var location = place.geometry.location;
+            document.getElementById('selected-location').value = location.lat() + ',' + location.lng();
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+                map: map,
+                title: place.name,
+                position: location
+            }));
+
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        });
+        map.fitBounds(bounds);
+    });
+
+    // Add click event listener to the map
+    map.addListener('click', function (event) {
+        // Get the clicked location
+        var clickedLocation = event.latLng;
+        
+        // Set the search box value to the clicked location
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({ 'location': clickedLocation }, function (results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    input.value = results[0].formatted_address;
+                    document.getElementById('selected-location').value = clickedLocation.lat() + ',' + clickedLocation.lng();
+                }
+            }
+        });
+    });
+}
+
+// Initialize the map after the DOM has loaded
+document.addEventListener('DOMContentLoaded', initMap);
+
+</script>
 
     <?php
     // Back to top
