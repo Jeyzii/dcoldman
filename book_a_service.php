@@ -30,7 +30,7 @@ if (!$services_result) {
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs&libraries=places" async></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs&libraries=places" async defer></script>
     <?php include("includes/head.php"); ?>
 
 <style>
