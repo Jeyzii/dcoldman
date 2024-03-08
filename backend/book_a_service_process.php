@@ -36,6 +36,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Booking time must be between 8 AM and 10 PM.";
     }
 
+    // Validate manpower availability
+    $manpowerAvailabilityQuery = "SELECT COUNT(*) AS available_manpower
+                                    FROM users
+                                    WHERE role = 'manpower'
+                                    AND availability = 1";
+
+    $manpowerAvailabilityResult = mysqli_query($conn, $manpowerAvailabilityQuery);
+    $manpowerAvailabilityData = mysqli_fetch_assoc($manpowerAvailabilityResult);
+    $availableManpowerCount = $manpowerAvailabilityData['available_manpower'];
+
+    if ($availableManpowerCount < 1) { //change base on requirement
+        // No available manpower
+        $_SESSION['error'] = "Manpower is not available right now, try again later.";
+        header("Location: ../book_a_service.php");
+        exit;
+    }
+
     if (empty($errors)) {
         // Sanitize user input to prevent SQL injection
         $booking_date = mysqli_real_escape_string($conn, $booking_date);
