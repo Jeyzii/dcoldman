@@ -77,6 +77,26 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
     <!-- Book a New Service Section -->
     <div class="container mt-5">
     <h1>User's Dashboard</h1>
+<?php if ($_SESSION['role'] == 'user') { ?>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
+                    <?php
+                    $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                    $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
+
+                    if ($availableManpowerCountResult) {
+                        $availableManpowerCount = mysqli_fetch_assoc($availableManpowerCountResult)['available_manpower_count'];
+                        echo "<p class='card-text'>$availableManpowerCount</p>";
+                    } else {
+                        echo "Error fetching available manpower information.";
+                    }
+                    ?>
+            </div>
+        </div>
+    </div><br>
+<?php               }?>
         <h3>Book a New Service</h3>
         <p>Click the button below to book a new service:</p>
         <a href="book_a_service.php" class="btn btn-primary mb-4">Book Now</a>
