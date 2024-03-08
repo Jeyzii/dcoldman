@@ -52,6 +52,7 @@ if (mysqli_query($conn, $sql)) {
         // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Email Verification';
+        //todo fix redirect url not found
         $mail->Body = 'Click the following link to verify your email: <a href="http://localhost/aircon/backend/auth/verify_process.php?code=' . $verification_code . '">Verify Email</a>';
 
         // Send the email
