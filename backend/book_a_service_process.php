@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+require '../includes/database.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/phpmailer/phpmailer/src/Exception.php';
+require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+
 // Check if the user is logged in
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
@@ -122,6 +130,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Check if the query was successful
                     if ($result) {
                         // Booking successful
+                    // User registration successful, send verification email
+                        $mail = new PHPMailer(true);
+                        //gmail
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Port = 587 ;
+                        $mail->Username = 'dcoldmandcdv@gmail.com';
+                        $mail->Password = 'mffr qibt bkgb fdco';
+
+                        // Set sender and recipient
+                        $mail->setFrom("dcoldmandcdv@gmail.com", "Dcoldman");
+                        $mail->addAddress($_SESSION["email"], $client_name );
+
+                        // Email content
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Successful Booking';
+
+                        $mail->Body = 'You have successfully booked a service. Click here to see your booking status: <a href="localhost/aircon/user_dashboard.php">Check Booking status</a>';
+
+                        // Send the email
+                        $mail->send();
+
                         $_SESSION['success'] = "Booking added successfully.";
                         header("Location: ../user_dashboard.php"); // Redirect to the user's dashboard
                         exit;
@@ -133,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } else {
                     // Invalid ETA duration from the API
-                    $_SESSION['error'] = "Invalid ETA duration from the API.";
+                    $_SESSION['error'] = "Invalid ETA duration.";
                     header("Location: ../book_a_service.php");
                     exit;
                 }
