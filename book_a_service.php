@@ -148,7 +148,7 @@ if (!$services_result) {
                                 <textarea class="form-control" id="special_request" name="special_request" style="height: 17px;"></textarea>
                             </div>
                             <div class="col-12">
-                                <label for="address" class="form-label">Address:</label>
+                                <label for="address" class="form-label">Address: </label>
                                 <!-- Search input for address -->
                                 <div id="pac-container">
                                     <input id="pac-input" name="address" type="text" placeholder="Enter a location">

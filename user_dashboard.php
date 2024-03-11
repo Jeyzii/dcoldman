@@ -77,6 +77,26 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
     <!-- Book a New Service Section -->
     <div class="container mt-5">
     <h1>User's Dashboard</h1>
+<?php if ($_SESSION['role'] == 'user') { ?>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
+                    <?php
+                    $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                    $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
+
+                    if ($availableManpowerCountResult) {
+                        $availableManpowerCount = mysqli_fetch_assoc($availableManpowerCountResult)['available_manpower_count'];
+                        echo "<p class='card-text'>$availableManpowerCount</p>";
+                    } else {
+                        echo "Error fetching available manpower information.";
+                    }
+                    ?>
+            </div>
+        </div>
+    </div><br>
+<?php               }?>
         <h3>Book a New Service</h3>
         <p>Click the button below to book a new service:</p>
         <a href="book_a_service.php" class="btn btn-primary mb-4">Book Now</a>
@@ -89,7 +109,16 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
             <?php
             if ($pendingResult && mysqli_num_rows($pendingResult) > 0) {
                 echo '<table class="table">';
-                echo '<thead><tr><th style="width: 150px;">Date</th><th style="width: 150px;">Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Estimated Time of Arrival</th><th>Status</th></tr></thead>';
+                echo '<thead>
+                        <tr>
+                            <th style="width: 150px;">Date</th>
+                            <th style="width: 150px;">Time</th>
+                            <th>Service</th><th>Address</th>
+                            <th>Special Request</th>
+                            <th>Estimated Wait Time (in minutes)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>';
                 echo '<tbody>';
                 while ($booking = mysqli_fetch_assoc($pendingResult)) {
                     echo '<tr>';
@@ -98,7 +127,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['service_type'] . '</td>';
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
-                    echo '<td>' . $booking['eta'] . '</td>';
+                    echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
                     echo '</tr>';
                 }
@@ -119,7 +148,17 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
             <?php
             if ($approvedResult && mysqli_num_rows($approvedResult) > 0) {
                 echo '<table class="table">';
-                echo '<thead><tr><th>Date</th><th>Time</th><th>Service</th><th>Address</th><th>Special Request</th><th>Estimated Time of Arrival</th><th>Status</th></tr></thead>';
+                echo '<thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Address</th>
+                            <th>Special Request</th>
+                            <th style="width: 250px;">Estimated Wait Time (in minutes)</th><th>Status</th>
+                            <th style="width: 250px;">Actions</th>
+                        </tr>
+                    </thead>';
                 echo '<tbody>';
                 while ($booking = mysqli_fetch_assoc($approvedResult)) {
                     echo '<tr>';
@@ -128,8 +167,13 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['service_type'] . '</td>';
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
-                    echo '<td>' . $booking['eta'] . '</td>';
+                    echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
+                    echo '<td>
+                        <a href="" class="btn btn-success btn-sm">Approve</a>
+                        <a href="" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="" class="btn btn-danger btn-sm">Cancel</a>
+                        </td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';

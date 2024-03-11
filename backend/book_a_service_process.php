@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+require '../includes/database.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/phpmailer/phpmailer/src/Exception.php';
+require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+
 // Check if the user is logged in
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
@@ -36,6 +44,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Booking time must be between 8 AM and 10 PM.";
     }
 
+    // Validate manpower availability
+    $manpowerAvailabilityQuery = "SELECT COUNT(*) AS available_manpower
+                                    FROM users
+                                    WHERE role = 'manpower'
+                                    AND availability = 1";
+
+    $manpowerAvailabilityResult = mysqli_query($conn, $manpowerAvailabilityQuery);
+    $manpowerAvailabilityData = mysqli_fetch_assoc($manpowerAvailabilityResult);
+    $availableManpowerCount = $manpowerAvailabilityData['available_manpower'];
+
+    if ($availableManpowerCount < 1) { //change base on requirement
+        // No available manpower
+        $_SESSION['error'] = "Manpower is not available right now, try again later.";
+        header("Location: ../book_a_service.php");
+        exit;
+    }
+
     if (empty($errors)) {
         // Sanitize user input to prevent SQL injection
         $booking_date = mysqli_real_escape_string($conn, $booking_date);
@@ -60,59 +85,98 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../book_a_service.php");
             exit;
         } else {
-            // Calculate ETA using Google Maps Distance Matrix API
-            $destination = urlencode($address); // Encode the destination address for the API
+            // Check if the address contains the keyword "Metro Manila"
+            if (stripos($address, "Metro Manila") !== false) {
+                // Calculate ETA using Google Maps Distance Matrix API
+                $destination = urlencode($address); // Encode the destination address for the API
 
-            // Specify the origin
-            $origin = urlencode("782 Quirino Avenue Tambo, Parañaque 1308 Metro Manila Philippines");
+                // Specify the origin
+                $origin = urlencode("782 Quirino Avenue Tambo, Parañaque 1308 Metro Manila Philippines");
 
-            // Prepare the Distance Matrix API request URL
-            // $apiUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$origin&destinations=$destination&key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs";
+                // Prepare the Distance Matrix API request URL
+                $apiUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$origin}&destinations={$destination}&key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs"; // Replace YOUR_API_KEY with your actual API key
 
-            $apiUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$origin}&destinations={$destination}&key=AIzaSyA08yFiEOhnLJ_CkSrkYDgHHNAROxsKHjs";
+                // Make a request to the Google Maps Distance Matrix API
+                $response = file_get_contents($apiUrl);
+                $data = json_decode($response, true);
 
-            // Make a request to the Google Maps Distance Matrix API
-            $response = file_get_contents($apiUrl);
-            $data = json_decode($response, true);
-
-            // Check if the API request was successful
+                // Check if the API request was successful
             if ($data['status'] == 'OK' && isset($data['rows'][0]['elements'][0]['duration']['value'])) {
-                // Extract the duration (ETA) from the API response
+                // Extract the duration (ETA) from the API response in seconds
                 $durationInSeconds = $data['rows'][0]['elements'][0]['duration']['value'];
-                
+
                 // Ensure $durationInSeconds is a valid integer
                 if (is_numeric($durationInSeconds)) {
-                    $etaDateTime = new DateTime("now", new DateTimeZone('UTC'));
-                    $etaDateTime->setTimestamp(time() + $durationInSeconds);
-                    $etaDateTime->setTimezone(new DateTimeZone('Asia/Manila')); // Replace 'Your_Timezone' with the actual timezone
-                    $eta = $etaDateTime->format('h:i A');
-                    
-                } else {
-                    $_SESSION['error'] = "Invalid ETA duration from the API.";
-                    header("Location: ../book_a_service.php");
-                    exit;
-                }
-                // Insert booking data into the database, including the calculated ETA
-                $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, address, special_request, status, eta)
-                            VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$address', '$special_request', 'Pending', '$eta')";
+                    // Calculate duration in minutes
+                    $durationInMinutes = round($durationInSeconds / 60);
 
-                $result = mysqli_query($conn, $query);
+                    // Check if duration exceeds 60 minutes
+                    if ($durationInMinutes > 60) {
+                        // Convert to hours
+                        $durationInHours = floor($durationInMinutes / 60);
+                        $durationInMinutes %= 60;
 
-                // Check if the query was successful
-                if ($result) {
-                    // Booking successful
-                    $_SESSION['success'] = "Booking added successfully.";
-                    header("Location: ../user_dashboard.php"); // Redirect to the user's dashboard
-                    exit;
+                        $eta = $durationInHours . ' hours ' . $durationInMinutes . ' minutes';
+                    } else {
+                        $eta = $durationInMinutes . ' minutes';
+                    }
+
+                    // Insert booking data into the database, including the calculated ETA
+                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, address, special_request, status, eta)
+                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$address', '$special_request', 'Pending', '$eta')";
+
+                    $result = mysqli_query($conn, $query);
+
+                    // Check if the query was successful
+                    if ($result) {
+                        // Booking successful
+                    // User registration successful, send verification email
+                        $mail = new PHPMailer(true);
+                        //gmail
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Port = 587 ;
+                        $mail->Username = 'dcoldmandcdv@gmail.com';
+                        $mail->Password = 'mffr qibt bkgb fdco';
+
+                        // Set sender and recipient
+                        $mail->setFrom("dcoldmandcdv@gmail.com", "Dcoldman");
+                        $mail->addAddress($_SESSION["email"], $client_name );
+
+                        // Email content
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Successful Booking';
+
+                        $mail->Body = 'You have successfully booked a service. Click here to see your booking status: <a href="localhost/aircon/user_dashboard.php">Check Booking status</a>';
+
+                        // Send the email
+                        $mail->send();
+
+                        $_SESSION['success'] = "Booking added successfully.";
+                        header("Location: ../user_dashboard.php"); // Redirect to the user's dashboard
+                        exit;
+                    } else {
+                        // Error in the query
+                        $_SESSION['error'] = "Error adding booking: " . mysqli_error($conn);
+                        header("Location: ../book_a_service.php");
+                        exit;
+                    }
                 } else {
-                    // Error in the query
-                    $_SESSION['error'] = "Error adding booking: " . mysqli_error($conn);
+                    // Invalid ETA duration from the API
+                    $_SESSION['error'] = "Invalid ETA duration.";
                     header("Location: ../book_a_service.php");
                     exit;
                 }
             } else {
                 // Unable to retrieve ETA from the API
                 $_SESSION['error'] = "Unable to calculate ETA.";
+                header("Location: ../book_a_service.php");
+                exit;
+            }
+            } else {
+                // Address is not within Metro Manila
+                $_SESSION['error'] = "Work location is within Metro Manila only.";
                 header("Location: ../book_a_service.php");
                 exit;
             }

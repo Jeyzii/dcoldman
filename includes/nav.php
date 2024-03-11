@@ -34,7 +34,8 @@
                     if (isset($_SESSION["role"])) {
                         switch ($_SESSION["role"]) {
                             case 'admin':
-                                echo '<li><a class="dropdown-item" href="admin_dashboard.php">Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="admin_dashboard.php">Admin Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
                                 break;
                             case 'manpower':
                                 echo '<li><a class="dropdown-item">Manpower Availability: </a></li>';
@@ -45,14 +46,16 @@
                                         </button>
                                     </form><hr>';
 
-                                echo '<li><a class="dropdown-item" href="manpower_dashboard.php">Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="manpower_dashboard.php">ManpowerDashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
                                 break;
 
                             case 'staff':
-                                echo '<li><a class="dropdown-item" href="staff_dashboard.php">Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="staff_dashboard.php">Staff Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
                                 break;
                             default:
-                                echo '<li><a class="dropdown-item" href="user_dashboard.php">Dashboard</a></li>';
+                                echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
                                 break;
                         }
                     }
