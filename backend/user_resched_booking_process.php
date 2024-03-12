@@ -13,7 +13,7 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
     $bookingId = $_GET['booking_id'];
 
     // Update the booking status to 'reschedule'
-    $updateQuery = "UPDATE bookings SET status = 'resched', management_approval = '1', user_approval = '0' WHERE booking_id = $bookingId";
+    $updateQuery = "UPDATE bookings SET status = 'resched' WHERE booking_id = $bookingId";
     $updateResult = mysqli_query($conn, $updateQuery);
 
     if ($updateResult) {

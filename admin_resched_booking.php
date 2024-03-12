@@ -8,7 +8,7 @@ if (isset($_GET['booking_id'])) {
     $booking_id = mysqli_real_escape_string($conn, $_GET['booking_id']);
 
     // Query to retrieve booking information
-    $query = "SELECT * FROM bookings WHERE booking_id = '$booking_id'";
+    $query = "SELECT * FROM bookings WHERE booking_id = '$booking_id' AND status = 'resched'";
     $result = mysqli_query($conn, $query);
 
     // Check if the query was successful
@@ -31,7 +31,7 @@ if (isset($_GET['booking_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Booking</title>
+    <title>Reschedule Booking</title>
     <?php include("includes/head.php"); ?>
 </head>
 <body>
