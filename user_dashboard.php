@@ -55,8 +55,8 @@ $approvedOffset = ($currentApprovedPage - 1) * $rowsPerPage;
 // Query to retrieve pending bookings for the user in descending order
 $user_id = $_SESSION["user_id"];
 
-$pendingQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $pendingOffset";
-$approvedQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Approved' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $approvedOffset";
+$pendingQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending' OR status = 'resched' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $pendingOffset";
+$approvedQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Approved' AND user_approval = '1' AND management_approval = '1' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $approvedOffset";
 
 
 $pendingResult = mysqli_query($conn, $pendingQuery);
@@ -117,6 +117,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                             <th>Special Request</th>
                             <th>Estimated Wait Time (in minutes)</th>
                             <th>Status</th>
+                            <th style="width: 250px;">Actions</th>
                         </tr>
                     </thead>';
                 echo '<tbody>';
@@ -129,12 +130,17 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
+                    echo '<td>
+                        <a href="backend/user_approve_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
+                        <a href="backend/user_resched_booking.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="backend/user_cancel_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
+                        </td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';
 
                 // Display pagination links
-                $pendingTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending'")) / $rowsPerPage);
+                $pendingTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending' OR status = 'resched'")) / $rowsPerPage);
                 echo ($pendingTotalPages > 1) ? generatePaginationLinks($currentPendingPage, $pendingTotalPages, 'user_dashboard.php?pending_page') : '';
             } else {
                 echo '<p>No pending bookings found.</p>';
@@ -156,7 +162,6 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                             <th>Address</th>
                             <th>Special Request</th>
                             <th style="width: 250px;">Estimated Wait Time (in minutes)</th><th>Status</th>
-                            <th style="width: 250px;">Actions</th>
                         </tr>
                     </thead>';
                 echo '<tbody>';
@@ -169,17 +174,17 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
-                    echo '<td>
-                        <a href="" class="btn btn-success btn-sm">Approve</a>
-                        <a href="" class="btn btn-info btn-sm text-white">Reschedule</a>
-                        <a href="" class="btn btn-danger btn-sm">Cancel</a>
-                        </td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';
 
                 // Display pagination links
-                $approvedTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Approved'")) / $rowsPerPage);
+                $approvedTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings 
+                                                                                    WHERE user_id = '$user_id' 
+                                                                                    AND status = 'Approved' 
+                                                                                    AND user_approval = '1' 
+                                                                                    AND management_approval = '1';
+                                                                                                    ")) / $rowsPerPage);
                 echo ($approvedTotalPages > 1) ? generatePaginationLinks($currentApprovedPage, $approvedTotalPages, 'user_dashboard.php?approved_page') : '';
             } else {
                 echo '<p>No approved bookings found.</p>';
