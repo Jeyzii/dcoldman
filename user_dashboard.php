@@ -117,6 +117,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                             <th>Special Request</th>
                             <th>Estimated Wait Time (in minutes)</th>
                             <th>Status</th>
+                            <th style="width: 250px;">Actions</th>
                         </tr>
                     </thead>';
                 echo '<tbody>';
@@ -129,6 +130,11 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
+                    echo '<td>
+                        <a href="backend/user_approve_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
+                        <a href="backend/user_resched_booking.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="backend/user_cancel_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
+                        </td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';
@@ -156,7 +162,6 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                             <th>Address</th>
                             <th>Special Request</th>
                             <th style="width: 250px;">Estimated Wait Time (in minutes)</th><th>Status</th>
-                            <th style="width: 250px;">Actions</th>
                         </tr>
                     </thead>';
                 echo '<tbody>';
@@ -169,11 +174,6 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td>' . $booking['status'] . '</td>';
-                    echo '<td>
-                        <a href="" class="btn btn-success btn-sm">Approve</a>
-                        <a href="" class="btn btn-info btn-sm text-white">Reschedule</a>
-                        <a href="" class="btn btn-danger btn-sm">Cancel</a>
-                        </td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';

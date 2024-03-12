@@ -12,7 +12,7 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
     $bookingId = $_GET['booking_id'];
 
     // Update the booking status to 'approved'
-    $updateQuery = "UPDATE bookings SET status = 'cancel', management_approval = '0' WHERE booking_id = $bookingId";
+    $updateQuery = "UPDATE bookings SET status = 'cancel', management_approval = '0', user_approval = '0' WHERE booking_id = $bookingId";
     $updateResult = mysqli_query($conn, $updateQuery);
 
     if ($updateResult) {
@@ -31,10 +31,11 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
         // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Booking Cancelled';
-        $mail->Body = 'Your booking has been cancelled. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
+        $mail->Body = 'You cancelled your booking. Check you booking status: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
 
         // Send the email
         $mail->send();
+
         $_SESSION['success'] = "Booking cancelled successfully";
     } else {
         $_SESSION['error'] = "Error approving booking: " . mysqli_error($conn);
@@ -43,6 +44,6 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
     $_SESSION['error'] = "Invalid booking ID.";
 }
 
-header("Location: ../staff_pending_bookings_management.php");
+header("Location: ../user_dashboard.php");
 exit;
 ?>

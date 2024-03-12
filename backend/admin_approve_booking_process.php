@@ -34,7 +34,6 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
         // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Booking Approved';
-        //todo fix redirect url not found
         $mail->Body = 'Your booking has been approved. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
 
         // Send the email

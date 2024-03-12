@@ -23,6 +23,7 @@
                 <ul class="dropdown-menu" aria-labelledby="bookingsDropdown">
                     <li><a class="dropdown-item" href="admin_pending_bookings_management.php">Pending</a></li>
                     <li><a class="dropdown-item" href="admin_approved_bookings_management.php">Approved</a></li>
+                    <li><a class="dropdown-item" href="">Reschedules</a></li>
                     <li><a class="dropdown-item" href="admin_cancelled_bookings_management.php">Cancelled</a></li>
                 </ul>
             </li>
