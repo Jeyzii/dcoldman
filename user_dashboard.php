@@ -133,7 +133,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                 if ($booking['management_approval'] == 1 && $booking['status'] != 'resched') {
                     echo '<td>
                         <a href="backend/user_approve_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
-                        <a href="backend/user_resched_booking.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="backend/user_resched_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
                         <a href="backend/user_cancel_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
                         </td>';
                 } else {
