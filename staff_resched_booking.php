@@ -8,7 +8,7 @@ if (isset($_GET['booking_id'])) {
     $booking_id = mysqli_real_escape_string($conn, $_GET['booking_id']);
 
     // Query to retrieve booking information
-    $query = "SELECT * FROM bookings WHERE booking_id = '$booking_id'";
+    $query = "SELECT * FROM bookings WHERE booking_id = '$booking_id' AND status = 'resched' OR status = 'pending'";
     $result = mysqli_query($conn, $query);
 
     // Check if the query was successful
