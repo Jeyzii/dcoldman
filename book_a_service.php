@@ -138,7 +138,7 @@ if (!$services_result) {
                                     <?php
                                     // Loop through the services and create options
                                     while ($service = mysqli_fetch_assoc($services_result)) {
-                                        echo '<option value="' . $service['service_name'] . '">' . $service['service_name'] . '</option>';
+                                        echo '<option value="' . $service['service_name'] . '">' . $service['service_name'] . ' - ₱' . $service['price'] . '</option>';
                                     }
                                     ?>
                                 </select>

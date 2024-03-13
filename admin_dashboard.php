@@ -86,7 +86,7 @@ require 'includes/admin_auth.php';
                             <div class="card-body">
                                 <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
                                 <?php
-                                $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                                $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1 AND role = 'manpower'";
                                 $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
 
                                 if ($availableManpowerCountResult) {

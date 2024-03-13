@@ -73,7 +73,7 @@ $offset = ($page - 1) * $recordsPerPage;
                         echo '<td>' . $reschedBooking['address'] . '</td>';
                         echo '<td>' . $reschedBooking['booking_date'] . '</td>';
                         echo '<td>' . $reschedBooking['booking_time'] . '</td>';
-                        echo '<td>\
+                        echo '<td>
                         <a href="admin_resched_booking.php?booking_id=' . $reschedBooking['booking_id'] . '" class="btn btn-info btn-sm text-white">Resched</a>
                         </td>';
                         // <a href="backend/admin_reject_booking_process.php?booking_id=' . $reschedBooking['booking_id'] . '" class="btn btn-danger btn-sm">Reject</a>
