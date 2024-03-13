@@ -72,7 +72,7 @@ if (isset($_GET['booking_id'])) {
                 <label for="booking_time" class="form-label">Time:</label>
                 <input type="time" class="form-control" id="booking_time" name="booking_time" value="<?php echo $booking['booking_time']; ?>" required>
             </div>
-            <button type="submit" class="btn btn-warning">Save Changes</button>
+            <button type="submit" class="btn btn-success">Save Changes</button>
         </form>
     </div>
 

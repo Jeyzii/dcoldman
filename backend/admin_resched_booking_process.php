@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Email content
         $mail->isHTML(true);
         $mail->Subject = 'Booking Rescheduled';
-        $mail->Body = 'Your booking has been successfully rescheduled. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
+        $mail->Body = 'Your booking has been rescheduled. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
 
         // Send the email
         $mail->send();

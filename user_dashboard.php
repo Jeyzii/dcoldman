@@ -77,13 +77,12 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
     <!-- Book a New Service Section -->
     <div class="container mt-5">
     <h1>User's Dashboard</h1>
-<?php if ($_SESSION['role'] == 'user') { ?>
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="fas fa-users"></i> Total Manpower Available</h5>
                     <?php
-                    $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1";
+                    $availableManpowerCountQuery = "SELECT COUNT(*) AS available_manpower_count FROM users WHERE availability = 1 AND role = 'manpower'";
                     $availableManpowerCountResult = mysqli_query($conn, $availableManpowerCountQuery);
 
                     if ($availableManpowerCountResult) {
@@ -96,7 +95,6 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
             </div>
         </div>
     </div><br>
-<?php               }?>
         <h3>Book a New Service</h3>
         <p>Click the button below to book a new service:</p>
         <a href="book_a_service.php" class="btn btn-primary mb-4">Book Now</a>
@@ -129,12 +127,16 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
-                    echo '<td>' . $booking['status'] . '</td>';
+                    echo '<td class="text-warning">' . $booking['status'] . '</td>';
+                if ($booking['management_approval'] == 1) {
                     echo '<td>
                         <a href="backend/user_approve_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
-                        <a href="backend/user_resched_booking.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="backend/user_resched_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
                         <a href="backend/user_cancel_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
                         </td>';
+                }else{
+                    echo '<td class="text-danger">Not yet approved by Dcoldman</td>';
+                }
                     echo '</tr>';
                 }
                 echo '</tbody></table>';
