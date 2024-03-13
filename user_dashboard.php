@@ -187,7 +187,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
-                    echo '<td>' . $booking['status'] . '</td>';
+                    echo '<td class="text-success">' . $booking['status'] . '</td>';
                     echo '</tr>';
                 }
                 echo '</tbody></table>';
