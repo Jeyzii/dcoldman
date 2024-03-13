@@ -119,26 +119,38 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                         </tr>
                     </thead>';
                 echo '<tbody>';
-                while ($booking = mysqli_fetch_assoc($pendingResult)) {
-                    echo '<tr>';
-                    echo '<td>' . $booking['booking_date'] . '</td>';
-                    echo '<td>' . date('h:i A', strtotime($booking['booking_time'])) . '</td>';
-                    echo '<td>' . $booking['service_type'] . '</td>';
-                    echo '<td>' . $booking['address'] . '</td>';
-                    echo '<td>' . $booking['special_request'] . '</td>';
-                    echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
-                    echo '<td class="text-warning">' . $booking['status'] . '</td>';
-                if ($booking['management_approval'] == 1) {
+            while ($booking = mysqli_fetch_assoc($pendingResult)) {
+                echo '<tr>';
+                echo '<td>' . $booking['booking_date'] . '</td>';
+                echo '<td>' . date('h:i A', strtotime($booking['booking_time'])) . '</td>';
+                echo '<td>' . $booking['service_type'] . '</td>';
+                echo '<td>' . $booking['address'] . '</td>';
+                echo '<td>' . $booking['special_request'] . '</td>';
+                echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
+                echo '<td class="text-warning">' . $booking['status'] . '</td>';
+                
+                // Conditional display of buttons based on management_approval and status
+                if ($booking['management_approval'] == 1 && $booking['status'] != 'resched') {
                     echo '<td>
                         <a href="backend/user_approve_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-success btn-sm">Approve</a>
-                        <a href="backend/user_resched_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
+                        <a href="backend/user_resched_booking.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-info btn-sm text-white">Reschedule</a>
                         <a href="backend/user_cancel_booking_process.php?booking_id=' . $booking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
                         </td>';
-                }else{
-                    echo '<td class="text-danger">Not yet approved by Dcoldman</td>';
+                } else {
+                    // If management_approval is not 1 or status is 'reschedule', show a message or leave the cell empty
+                    if ($booking['status'] == 'resched') {
+                    echo '<td class="text-info">';
+                        echo 'Reschedule Pending';
+                    } else {
+                    echo '<td class="text-danger">';
+
+                        echo 'Management Approval Pending';
+                    }
+                    echo '</td>';
                 }
-                    echo '</tr>';
-                }
+                
+                echo '</tr>';
+            }
                 echo '</tbody></table>';
 
                 // Display pagination links
