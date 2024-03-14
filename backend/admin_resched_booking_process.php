@@ -26,26 +26,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $update_result = mysqli_query($conn, $update_query);
 
     if ($update_result) {
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Port = 587 ;
-        $mail->Username = 'dcoldmandcdv@gmail.com';
-        $mail->Password = 'mffr qibt bkgb fdco';
+        // Select user information
+        $getUserQuery = "SELECT users.email, users.name FROM users JOIN bookings ON users.user_id = bookings.user_id WHERE bookings.booking_id = '$booking_id'";
+        $getUserResult = mysqli_query($conn, $getUserQuery);
+        $getUserData = mysqli_fetch_assoc($getUserResult);
 
-        // Set sender and recipient
-        $mail->setFrom("dcoldmandcdv@gmail.com", "Dcoldman");
-        $mail->addAddress($_SESSION['email'], $_SESSION['name'] );
+        // Check if user data was retrieved successfully
+        if ($getUserData) {
+            // Send email
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Port = 587 ;
+            $mail->Username = 'dcoldmandcdv@gmail.com';
+            $mail->Password = 'mffr qibt bkgb fdco';
 
-        // Email content
-        $mail->isHTML(true);
-        $mail->Subject = 'Booking Rescheduled';
-        $mail->Body = 'Your booking has been rescheduled. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
+            // Set sender and recipient
+            $mail->setFrom("dcoldmandcdv@gmail.com", "Dcoldman");
+            $mail->addAddress($getUserData['email'], $getUserData['name']);
 
-        // Send the email
-        $mail->send();
-        $_SESSION["success_message"] = "Booking rescheduled successfully.";
+            // Email content
+            $mail->isHTML(true);
+            $mail->Subject = 'Booking Rescheduled';
+            $mail->Body = 'Your booking has been rescheduled. Click here to check your booking: <a href="localhost/aircon/user_dashboard.php">Check Booking</a>';
+
+            // Send the email
+            $mail->send();
+            $_SESSION["success_message"] = "Booking rescheduled successfully.";
+        } else {
+            $_SESSION["error_message"] = "Error: Unable to fetch user information.";
+        }
     } else {
         $_SESSION["error_message"] = "Error rescheduling booking: " . mysqli_error($conn);
     }
