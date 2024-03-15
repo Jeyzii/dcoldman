@@ -55,8 +55,8 @@ $approvedOffset = ($currentApprovedPage - 1) * $rowsPerPage;
 // Query to retrieve pending bookings for the user in descending order
 $user_id = $_SESSION["user_id"];
 
-$pendingQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending' OR status = 'resched' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $pendingOffset";
-$approvedQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Approved' AND user_approval = '1' AND management_approval = '1' ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $approvedOffset";
+$pendingQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'Pending' OR status = 'resched') ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $pendingOffset";
+$approvedQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'Approved' AND user_approval = '1' AND management_approval = '1') ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $approvedOffset";
 
 
 $pendingResult = mysqli_query($conn, $pendingQuery);
@@ -154,7 +154,7 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                 echo '</tbody></table>';
 
                 // Display pagination links
-                $pendingTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings WHERE user_id = '$user_id' AND status = 'Pending' OR status = 'resched'")) / $rowsPerPage);
+                $pendingTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'Pending' OR status = 'resched')")) / $rowsPerPage);
                 echo ($pendingTotalPages > 1) ? generatePaginationLinks($currentPendingPage, $pendingTotalPages, 'user_dashboard.php?pending_page') : '';
             } else {
                 echo '<p>No pending bookings found.</p>';
@@ -194,11 +194,11 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
 
                 // Display pagination links
                 $approvedTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings 
-                                                                                    WHERE user_id = '$user_id' 
-                                                                                    AND status = 'Approved' 
-                                                                                    AND user_approval = '1' 
-                                                                                    AND management_approval = '1';
-                                                                                                    ")) / $rowsPerPage);
+                                                                                WHERE user_id = '$user_id' 
+                                                                                AND status = 'Approved' 
+                                                                                AND user_approval = '1' 
+                                                                                AND management_approval = '1'")) / $rowsPerPage);
+
                 echo ($approvedTotalPages > 1) ? generatePaginationLinks($currentApprovedPage, $approvedTotalPages, 'user_dashboard.php?approved_page') : '';
             } else {
                 echo '<p>No approved bookings found.</p>';

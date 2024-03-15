@@ -108,18 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Ensure $durationInSeconds is a valid integer
                 if (is_numeric($durationInSeconds)) {
                     // Calculate duration in minutes
-                    $durationInMinutes = round($durationInSeconds / 60);
-
-                    // Check if duration exceeds 60 minutes
-                    if ($durationInMinutes > 60) {
-                        // Convert to hours
-                        $durationInHours = floor($durationInMinutes / 60);
-                        $durationInMinutes %= 60;
-
-                        $eta = $durationInHours . ' hours ' . $durationInMinutes . ' minutes';
-                    } else {
-                        $eta = $durationInMinutes . ' minutes';
-                    }
+                    $eta = round($durationInSeconds / 60);
 
                     // Insert booking data into the database, including the calculated ETA
                     $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, address, special_request, status, eta)
@@ -130,7 +119,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Check if the query was successful
                     if ($result) {
                         // Booking successful
-                    // User registration successful, send verification email
                         $mail = new PHPMailer(true);
                         //gmail
                         $mail->isSMTP();
