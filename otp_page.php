@@ -95,7 +95,7 @@
         }
         ?>
 
-        <p>Didn't receive the OTP? <a href="resend_otp.php">Resend OTP</a></p>
+        <!-- <p>Didn't receive the OTP? <a href="resend_otp.php">Resend OTP</a></p> -->
     </div>
 </body>
 </html>

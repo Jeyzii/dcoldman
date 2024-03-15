@@ -47,7 +47,6 @@
                                     </form><hr>';
 
                                 echo '<li><a class="dropdown-item" href="manpower_dashboard.php">ManpowerDashboard</a></li>';
-                                echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
                                 break;
 
                             case 'staff':

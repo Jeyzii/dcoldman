@@ -1,11 +1,10 @@
 <?php
 session_start();
-
-// Include database connection
 require '../includes/database.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Include PHPMailer classes
 require '../vendor/phpmailer/phpmailer/src/Exception.php';
 require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../vendor/phpmailer/phpmailer/src/SMTP.php';
@@ -26,14 +25,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $update_result = mysqli_query($conn, $update_query);
 
     if ($update_result) {
-        // Select user information
-        $getUserQuery = "SELECT users.email, users.name FROM users JOIN bookings ON users.user_id = bookings.user_id WHERE bookings.booking_id = '$booking_id'";
-        $getUserResult = mysqli_query($conn, $getUserQuery);
-        $getUserData = mysqli_fetch_assoc($getUserResult);
+        // Fetch user details
+        $getUserQuery = "SELECT u.email, u.name FROM bookings b INNER JOIN users u ON b.user_id = u.user_id WHERE b.booking_id = $booking_id";
+        $userResult = mysqli_query($conn, $getUserQuery);
+        $userRow = mysqli_fetch_assoc($userResult);
 
-        // Check if user data was retrieved successfully
-        if ($getUserData) {
-            // Send email
+        if ($userRow) {
+            $userEmail = $userRow['email'];
+            $userName = $userRow['name'];
+
+
             $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
@@ -58,11 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["error_message"] = "Error: Unable to fetch user information.";
         }
     } else {
-        $_SESSION["error_message"] = "Error rescheduling booking: " . mysqli_error($conn);
+        $_SESSION['error'] = "Error approving booking: " . mysqli_error($conn);
     }
-
-    // Redirect back to pending bookings management page
-    header("Location: ../admin_pending_bookings_management.php");
-    exit;
+} else {
+    $_SESSION['error'] = "Invalid booking ID.";
 }
+
+header("Location: ../admin_pending_bookings_management.php");
+exit;
 ?>

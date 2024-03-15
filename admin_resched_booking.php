@@ -7,8 +7,12 @@ require 'includes/admin_auth.php';
 if (isset($_GET['booking_id'])) {
     $booking_id = mysqli_real_escape_string($conn, $_GET['booking_id']);
 
-    // Query to retrieve booking information
-    $query = "SELECT * FROM bookings WHERE booking_id = '$booking_id' AND status = 'resched' OR status = 'pending'";
+    // Query to retrieve booking information along with user_id
+    $query = "SELECT bookings.*, users.user_id 
+                FROM bookings 
+                INNER JOIN users ON bookings.user_id = users.user_id 
+                WHERE bookings.booking_id = '$booking_id' 
+                AND (bookings.status = 'resched' OR bookings.status = 'pending')";
     $result = mysqli_query($conn, $query);
 
     // Check if the query was successful
