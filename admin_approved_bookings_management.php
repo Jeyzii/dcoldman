@@ -37,10 +37,14 @@ $offset = ($page - 1) * $recordsPerPage;
                 <h3>Approved Bookings</h3>
                 <?php
                 // Fetch approved bookings with user information
-                $approvedBookingsQuery = "SELECT bookings.*, users.name AS booker_name FROM bookings 
-                                        INNER JOIN users ON bookings.user_id = users.user_id
-                                        WHERE status = 'approved'
-                                        LIMIT $recordsPerPage OFFSET $offset";
+                $approvedBookingsQuery = "SELECT bookings.*, users.name AS booker_name 
+                                            FROM bookings 
+                                            INNER JOIN users ON bookings.user_id = users.user_id
+                                            WHERE bookings.status = 'approved' 
+                                            AND bookings.user_approval = '1' 
+                                            AND bookings.management_approval = '1'
+                                            LIMIT $recordsPerPage OFFSET $offset";
+
                 $approvedBookingsResult = mysqli_query($conn, $approvedBookingsQuery);
 
                 if ($approvedBookingsResult && mysqli_num_rows($approvedBookingsResult) > 0) {
@@ -66,7 +70,7 @@ $offset = ($page - 1) * $recordsPerPage;
                     echo '</tbody></table>';
 
                     // Pagination links
-                    $totalPagesQuery = "SELECT COUNT(*) as total FROM bookings WHERE status = 'approved'";
+                    $totalPagesQuery = "SELECT COUNT(*) as total FROM bookings WHERE status = 'approved' AND user_approval = '1' AND management_approval = '1'";
                     $totalPagesResult = mysqli_query($conn, $totalPagesQuery);
                     $totalPages = ceil(mysqli_fetch_assoc($totalPagesResult)['total'] / $recordsPerPage);
 
