@@ -25,6 +25,7 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
             $userEmail = $userRow['email'];
             $userName = $userRow['name'];
 
+
             $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';

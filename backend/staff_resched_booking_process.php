@@ -25,6 +25,13 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
             $userEmail = $userRow['email'];
             $userName = $userRow['name'];
 
+        // Select user information
+        $getUserQuery = "SELECT users.email, users.name FROM users JOIN bookings ON users.user_id = bookings.user_id WHERE bookings.booking_id = '$booking_id'";
+        $getUserResult = mysqli_query($conn, $getUserQuery);
+        $getUserData = mysqli_fetch_assoc($getUserResult);
+
+        // Check if user data was retrieved successfully
+        if ($getUserData) {
             $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
