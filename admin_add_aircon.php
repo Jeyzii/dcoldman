@@ -9,7 +9,7 @@ require 'includes/admin_auth.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Service</title>
+    <title>Add Aircon</title>
     <?php include("includes/head.php"); ?>
 </head>
 <body>
@@ -27,19 +27,15 @@ require 'includes/admin_auth.php';
         }
         ?>
 
-        <!-- Service Add Form -->
-        <form action="backend/admin_add_service_process.php" method="post">
+        <!-- Aircon Add Form -->
+        <form action="backend/admin_add_aircon_process.php" method="post">
             <div class="mb-3">
-                <label for="service_name" class="form-label">Service Name:</label>
-                <input type="text" class="form-control" id="service_name" name="service_name" required>
+                <label for="name" class="form-label">Aircon Type:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <textarea class="form-control" id="description" name="description" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="total_manpower" class="form-label">Total Manpower:</label>
-                <input type="number" class="form-control" id="total_manpower" name="total_manpower" required>
+                <label for="info" class="form-label">Information:</label>
+                <textarea class="form-control" id="info" name="info" required></textarea>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>

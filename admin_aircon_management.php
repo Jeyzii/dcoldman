@@ -13,13 +13,13 @@ $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 // Calculate the OFFSET for the SQL query
 $offset = ($page - 1) * $recordsPerPage;
 
-// Fetch services with pagination
-$query = "SELECT * FROM air_condition_services LIMIT $recordsPerPage OFFSET $offset";
+// Fetch aircons with pagination
+$query = "SELECT * FROM aircon_types LIMIT $recordsPerPage OFFSET $offset";
 $result = mysqli_query($conn, $query);
 
 // Check if the query was successful
 if ($result) {
-    $services = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $aircons = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } else {
     $error_message = "Error: " . mysqli_error($conn);
 }
@@ -30,7 +30,7 @@ if ($result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services Management</title>
+    <title>Air conditioner Types Management</title>
     <?php include("includes/head.php"); ?>
 </head>
 <body>
@@ -45,7 +45,7 @@ if ($result) {
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="container mt-5">
-                    <h2>Services Management</h2>
+                    <h2>Air conditioner Types Management</h2>
 
                     <?php
         // Display error message if there is an error in the query
@@ -60,26 +60,25 @@ if ($result) {
         }
         ?>
 
-        <!-- Add Service Button -->
-        <a href="admin_add_service.php" class="btn btn-primary mb-3">Add Service</a>
+        <!-- Add aircon Button -->
+        <a href="admin_add_aircon.php" class="btn btn-primary mb-3">Add Aircon Type</a>
 
         <?php
-        // Display the list of services
-        if (isset($services)) {
+        // Display the list of aircons
+        if (isset($aircons)) {
             echo '<table class="table">';
-            echo '<thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Total Manpower</th><th>Price</th><th>Actions</th></tr></thead>';
+            echo '<thead><tr><th>ID</th><th>Name</th><th>Information</th><th>Price</th><th>Actions</th></tr></thead>';
             echo '<tbody>';
             
-            foreach ($services as $service) {
+            foreach ($aircons as $aircon) {
                 echo '<tr>';
-                echo '<td>' . $service['service_id'] . '</td>';
-                echo '<td>' . $service['service_name'] . '</td>';
-                echo '<td>' . $service['description'] . '</td>';
-                echo '<td>' . $service['total_manpower'] . '</td>';
-                echo '<td>' . $service['price'] . '</td>';
+                echo '<td>' . $aircon['id'] . '</td>';
+                echo '<td>' . $aircon['name'] . '</td>';
+                echo '<td>' . $aircon['info'] . '</td>';
+                echo '<td>' . $aircon['price'] . '</td>';
                 echo '<td>
-                        <a href="admin_edit_service.php?service_id=' . $service['service_id'] . '" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="backend/admin_delete_service_process.php?id=' . $service['service_id'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this service?\')">Delete</a>
+                        <a href="admin_edit_aircon.php?id=' . $aircon['id'] . '" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="backend/admin_delete_aircon_process.php?id=' . $aircon['id'] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this aircon?\')">Delete</a>
                     </td>';
                 echo '</tr>';
             }
@@ -87,7 +86,7 @@ if ($result) {
             echo '</tbody></table>';
 
             // Pagination links
-            $totalPagesQuery = "SELECT CEIL(COUNT(*) / $recordsPerPage) AS totalPages FROM air_condition_services";
+            $totalPagesQuery = "SELECT CEIL(COUNT(*) / $recordsPerPage) AS totalPages FROM aircon_types";
             $totalPagesResult = mysqli_query($conn, $totalPagesQuery);
             $totalPages = mysqli_fetch_assoc($totalPagesResult)['totalPages'];
 
