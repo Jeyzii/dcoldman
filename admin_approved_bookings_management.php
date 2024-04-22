@@ -62,6 +62,7 @@ $offset = ($page - 1) * $recordsPerPage;
                         echo '<td>' . $approvedBooking['booking_date'] . '</td>';
                         echo '<td>' . $approvedBooking['booking_time'] . '</td>';
                         echo '<td>
+                        <a href="backend/admin_done_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-success btn-sm">Done</a>
                         <a href="backend/admin_cancel_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
                         </td>';
                         echo '</tr>';
