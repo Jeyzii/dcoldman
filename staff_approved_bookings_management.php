@@ -18,7 +18,7 @@ $offset = ($page - 1) * $recordsPerPage;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard</title>
+    <title>staff Dashboard</title>
     <?php include("includes/head.php"); ?>
     <!-- Include font-awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-d3L9/ATCV5T1OlCpG4IwPmOK51Gh3Ze9YucnN7Iuov1D1evSwMk/sFgU5X6j9kfo" crossorigin="anonymous">
@@ -44,6 +44,7 @@ $offset = ($page - 1) * $recordsPerPage;
                                             AND bookings.user_approval = '1' 
                                             AND bookings.management_approval = '1'
                                             LIMIT $recordsPerPage OFFSET $offset";
+
                 $approvedBookingsResult = mysqli_query($conn, $approvedBookingsQuery);
 
                 if ($approvedBookingsResult && mysqli_num_rows($approvedBookingsResult) > 0) {
@@ -61,6 +62,7 @@ $offset = ($page - 1) * $recordsPerPage;
                         echo '<td>' . $approvedBooking['booking_date'] . '</td>';
                         echo '<td>' . $approvedBooking['booking_time'] . '</td>';
                         echo '<td>
+                        <a href="backend/staff_done_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-success btn-sm">Done</a>
                         <a href="backend/staff_cancel_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
                         </td>';
                         echo '</tr>';

@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $booking_date = $_POST["booking_date"];
     $booking_time = $_POST["booking_time"];
     $service_type = $_POST["service_type"];
+    $aircon_type = $_POST["aircon_type"];
     $address = $_POST["address"];
     $special_request = $_POST["special_request"];
 
@@ -45,6 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Validate manpower availability
+    $requiredManpowerQuery = "SELECT total_manpower
+                                FROM air_condition_services
+                                WHERE service_name = '$service_type'";
+
+    $requiredManpowerResult = mysqli_query($conn, $requiredManpowerQuery);
+    $requiredManpowerData = mysqli_fetch_assoc($requiredManpowerResult);
+    $requiredManpower = $requiredManpowerData['total_manpower']; // Extracting required manpower count
+
     $manpowerAvailabilityQuery = "SELECT COUNT(*) AS available_manpower
                                     FROM users
                                     WHERE role = 'manpower'
@@ -54,9 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $manpowerAvailabilityData = mysqli_fetch_assoc($manpowerAvailabilityResult);
     $availableManpowerCount = $manpowerAvailabilityData['available_manpower'];
 
-    if ($availableManpowerCount < 1) { //change base on requirement
-        // No available manpower
-        $_SESSION['error'] = "Manpower is not available right now, try again later.";
+    if ($availableManpowerCount < $requiredManpower) {
+        // lack of manpower
+        $_SESSION['error'] = "There is a lack of manpower as of now, please try again later.";
         header("Location: ../book_a_service.php");
         exit;
     }
@@ -66,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $booking_date = mysqli_real_escape_string($conn, $booking_date);
         $booking_time = mysqli_real_escape_string($conn, $booking_time);
         $service_type = mysqli_real_escape_string($conn, $service_type);
+        $aircon_type = mysqli_real_escape_string($conn, $aircon_type);
         $address = mysqli_real_escape_string($conn, $address);
         $special_request = mysqli_real_escape_string($conn, $special_request);
 
@@ -74,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 WHERE booking_date = '$booking_date' 
                                 AND booking_time = '$booking_time'
                                 AND service_type = '$service_type'
+                                AND aircon_type = '$aircon_type'
                                 AND status != 'Cancelled'
                                 AND status != 'reject'";
 
@@ -111,14 +122,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $eta = round($durationInSeconds / 60);
 
                     // Insert booking data into the database, including the calculated ETA
-                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, address, special_request, status, eta)
-                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$address', '$special_request', 'Pending', '$eta')";
+                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, aircon_type, address, special_request, status, eta)
+                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$aircon_type', '$address', '$special_request', 'Pending', '$eta')";
 
                     $result = mysqli_query($conn, $query);
-
                     // Check if the query was successful
-                    if ($result) {
-                        // Booking successful
+                    if ($result) {  
+                        // Get the ID of the last inserted booking
+                        $bookingId = mysqli_insert_id($conn);
+                        // query required manpower user
+                        // Select the first available users with the role of 'manpower'
+                        $manpowerSelectionQuery = "SELECT user_id
+                                                        FROM users
+                                                        WHERE role = 'manpower'
+                                                        AND availability = 1
+                                                        LIMIT $requiredManpower FOR UPDATE"; // Lock rows for update
+
+                        $manpowerSelectionResult = mysqli_query($conn, $manpowerSelectionQuery);
+
+                        // Check if there are available users
+                        if (mysqli_num_rows($manpowerSelectionResult) < $requiredManpower) {
+                            throw new Exception("Insufficient available manpower.");
+                        }
+
+                        // Iterate through the selected users
+                        while ($user = mysqli_fetch_assoc($manpowerSelectionResult)) {
+                            $userId = $user['user_id'];
+                            // update manpower availability and booking reference id
+                            $updateQuery = "UPDATE users SET availability = 2, booking_reference_id = $bookingId WHERE user_id = $userId";
+                            mysqli_query($conn, $updateQuery);
+                        }
+                        
+                        //mail 
                         $mail = new PHPMailer(true);
                         //gmail
                         $mail->isSMTP();
@@ -141,11 +176,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Send the email
                         $mail->send();
 
+                        mysqli_commit($conn);
                         $_SESSION['success'] = "Booking added successfully.";
                         header("Location: ../user_dashboard.php"); // Redirect to the user's dashboard
                         exit;
                     } else {
                         // Error in the query
+                        mysqli_rollback($conn);
                         $_SESSION['error'] = "Error adding booking: " . mysqli_error($conn);
                         header("Location: ../book_a_service.php");
                         exit;

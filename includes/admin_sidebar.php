@@ -12,6 +12,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="admin_aircon_management.php">
+                    Aircon Types
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="admin_manpower_availability_tracker.php">
                     Manpower Availability Tracker 
                 </a>
@@ -24,6 +29,7 @@
                     <li><a class="dropdown-item" href="admin_pending_bookings_management.php">Pending</a></li>
                     <li><a class="dropdown-item" href="admin_approved_bookings_management.php">Approved</a></li>
                     <li><a class="dropdown-item" href="admin_resched_bookings_management.php">Reschedule requests</a></li>
+                    <li><a class="dropdown-item" href="admin_done_bookings_management.php">Done</a></li>
                     <li><a class="dropdown-item" href="admin_cancelled_bookings_management.php">Cancelled</a></li>
                 </ul>
             </li>

@@ -67,7 +67,7 @@ if ($result) {
         // Display the list of services
         if (isset($services)) {
             echo '<table class="table">';
-            echo '<thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Actions</th></tr></thead>';
+            echo '<thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Total Manpower</th><th>Price</th><th>Actions</th></tr></thead>';
             echo '<tbody>';
             
             foreach ($services as $service) {
@@ -75,6 +75,7 @@ if ($result) {
                 echo '<td>' . $service['service_id'] . '</td>';
                 echo '<td>' . $service['service_name'] . '</td>';
                 echo '<td>' . $service['description'] . '</td>';
+                echo '<td>' . $service['total_manpower'] . '</td>';
                 echo '<td>' . $service['price'] . '</td>';
                 echo '<td>
                         <a href="staff_edit_service.php?service_id=' . $service['service_id'] . '" class="btn btn-warning btn-sm">Edit</a>

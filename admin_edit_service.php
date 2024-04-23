@@ -62,6 +62,10 @@ if (isset($_GET['service_id'])) {
                 <textarea class="form-control" id="description" name="description" required><?php echo $service['description']; ?></textarea>
             </div>
             <div class="mb-3">
+                <label for="total_manpower" class="form-label">Total Manpower:</label>
+                <input type="number" class="form-control" id="total_manpower" name="total_manpower" value="<?php echo $service['total_manpower']; ?>" required>
+            </div>
+            <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>
                 <input type="text" class="form-control" id="price" name="price" value="<?php echo $service['price']; ?>" required>
             </div>
