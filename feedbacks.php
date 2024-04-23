@@ -37,7 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $loggedIn) {
 }
 
 // Fetch feedbacks from the database
-$feedbacksQuery = "SELECT users.name, feedbacks.feedback, feedbacks.feedback_id, feedbacks.user_id AS feedback_author_id FROM feedbacks 
+$feedbacksQuery = "SELECT users.name, feedbacks.feedback, feedbacks.feedback_id, feedbacks.user_id AS feedback_author_id,
+                    feedbacks.booking_feedback, feedbacks.manpower_feedback, feedbacks.booking_rating, feedbacks.manpower_rating
+                    FROM feedbacks 
                     INNER JOIN users ON feedbacks.user_id = users.user_id";
 $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
 ?>
@@ -51,6 +53,36 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
     <meta content="" name="keywords">
     <meta content="" name="description">
     <?php include("includes/head.php"); ?>
+    <style>
+        /* Style for star rating */
+        .rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+
+        .rating>input {
+            display: none;
+        }
+
+        .rating>label {
+            display: inline-block;
+            width: 1.1em;
+            font-size: 2rem;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            color: #fdd835;
+        }
+
+        .rating>input:checked~label,
+        .rating>input:checked~label:hover,
+        .rating>input:checked~label:hover~label {
+            color: #fdd835;
+        }
+    </style>
 </head>
 
 <body>
@@ -96,9 +128,59 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                             <div class="testimonial-item text-center">
                                 <h5><?= $feedback['name'] ?></h5>
                                 <hr>
-                                <p class="fs-5"><?= $feedback['feedback'] ?></p>
+                                <?php if (!empty($feedback['feedback'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Feedback:</strong></label>
+                                        <p class="fs-5"><?= $feedback['feedback'] ?></p>
+                                    </div>
+                                <?php endif; ?>
+                                <hr>
+                                <?php if (!empty($feedback['booking_feedback'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Booking Feedback:</strong></label>
+                                        <p class="fs-5"><?= $feedback['booking_feedback'] ?></p>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($feedback['booking_rating'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Booking Rating:</strong></label>
+                                        <div class="rating">
+                                            <?php
+                                            $bookingRating = $feedback['booking_rating'];
+                                            $i = 1;
+                                            while ($i <= $bookingRating) {
+                                                echo '<label>★</label>';
+                                                $i++;
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <hr>
+                                <?php if (!empty($feedback['manpower_feedback'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Manpower Feedback:</strong></label>
+                                        <p class="fs-5"><?= $feedback['manpower_feedback'] ?></p>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($feedback['manpower_rating'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Manpower Rating:</strong></label>
+                                    <div class="rating">
+                                            <?php
+                                            $bookingRating = $feedback['manpower_rating'];
+                                            $i = 1;
+                                            while ($i <= $bookingRating) {
+                                                echo '<label>★</label>';
+                                                $i++;
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
+
                     </div>
                 </div>
                 <div class="col-lg-3 d-none d-lg-block"></div>
