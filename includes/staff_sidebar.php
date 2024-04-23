@@ -1,14 +1,19 @@
 <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
     <div class="position-sticky">
         <ul class="nav flex-column">
-        <li class="nav-item">
-        <li class="nav-item">
-                <a class="nav-link" href="staff_user_management.php">
-                    User
+            <li class="nav-item">
+                <a class="nav-link active" href="staff_user_management.php">
+                    Users
                 </a>
             </li>
+            <li class="nav-item">
                 <a class="nav-link" href="staff_services_management.php">
                     Services
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="staff_aircon_management.php">
+                    Aircon Types
                 </a>
             </li>
             <li class="nav-item">
@@ -24,6 +29,7 @@
                     <li><a class="dropdown-item" href="staff_pending_bookings_management.php">Pending</a></li>
                     <li><a class="dropdown-item" href="staff_approved_bookings_management.php">Approved</a></li>
                     <li><a class="dropdown-item" href="staff_resched_bookings_management.php">Reschedule requests</a></li>
+                    <li><a class="dropdown-item" href="staff_done_bookings_management.php">Done</a></li>
                     <li><a class="dropdown-item" href="staff_cancelled_bookings_management.php">Cancelled</a></li>
                 </ul>
             </li>

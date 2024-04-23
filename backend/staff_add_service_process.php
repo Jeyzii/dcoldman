@@ -10,16 +10,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $serviceName = mysqli_real_escape_string($conn, $_POST['service_name']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $price = mysqli_real_escape_string($conn, $_POST['price']);
+    $total_manpower = mysqli_real_escape_string($conn, $_POST['total_manpower']);
 
     // Simple form validation
-    if (empty($serviceName) || empty($price)) {
-        $_SESSION["error_message"] = "Service name and price are required fields.";
+    if (empty($serviceName) || empty($price) || empty($total_manpower)) {
+        $_SESSION["error_message"] = "Please fil up the required fields.";
         header("Location: ../staff_add_service.php");
         exit;
     }
 
     // Insert the new service into the database
-    $insertQuery = "INSERT INTO air_condition_services (service_name, description, price) VALUES ('$serviceName', '$description', '$price')";
+    $insertQuery = "INSERT INTO air_condition_services (service_name, description, price, total_manpower) VALUES ('$serviceName', '$description', '$price', '$total_manpower')";
     $result = mysqli_query($conn, $insertQuery);
 
     if ($result) {

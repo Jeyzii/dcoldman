@@ -11,11 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $serviceName = mysqli_real_escape_string($conn, $_POST['service_name']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $price = mysqli_real_escape_string($conn, $_POST['price']);
+    $total_manpower = mysqli_real_escape_string($conn, $_POST['total_manpower']);
 
     // Validate form data (add your validation logic here)
 
     // Update the service in the database
-    $updateQuery = "UPDATE air_condition_services SET service_name = '$serviceName', description = '$description', price = '$price' WHERE service_id = '$serviceId'";
+    $updateQuery = "UPDATE air_condition_services SET service_name = '$serviceName', description = '$description', price = '$price', total_manpower = '$total_manpower' WHERE service_id = '$serviceId'";
     $result = mysqli_query($conn, $updateQuery);
 
     if ($result) {
