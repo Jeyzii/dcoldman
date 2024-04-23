@@ -36,11 +36,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $loggedIn) {
     exit;
 }
 
-// Fetch feedbacks from the database
-$feedbacksQuery = "SELECT users.name, feedbacks.feedback, feedbacks.feedback_id, feedbacks.user_id AS feedback_author_id,
-                    feedbacks.booking_feedback, feedbacks.manpower_feedback, feedbacks.booking_rating, feedbacks.manpower_rating
-                    FROM feedbacks 
-                    INNER JOIN users ON feedbacks.user_id = users.user_id";
+// Fetch feedbacks from the database along with associated booking details
+$feedbacksQuery = "SELECT f.name, f.feedback, f.feedback_id, f.user_id AS feedback_author_id,
+                        f.booking_feedback, f.manpower_feedback, f.booking_rating, f.manpower_rating,
+                        b.service_type, b.aircon_type
+                    FROM feedbacks f
+                    LEFT JOIN bookings b ON f.booking_id = b.booking_id
+                    INNER JOIN users u ON f.user_id = u.user_id";
+
 $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
 ?>
 
@@ -126,15 +129,26 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                     <div class="owl-carousel testimonial-carousel">
                         <?php foreach ($feedbacksResult as $feedback) : ?>
                             <div class="testimonial-item text-center">
-                                <h5><?= $feedback['name'] ?></h5>
+                                <h3><?= $feedback['name'] ?></h3>
                                 <hr>
+                                <?php if (!empty($feedback['service_type']) || !empty($feedback['aircon_type'])) : ?>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Service Type:</strong></label>
+                                        <p class="fs-5"><?= $feedback['service_type'] ?></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong style="font-size: 1.5em;">Aircon Type:</strong></label>
+                                        <p class="fs-5"><?= $feedback['aircon_type'] ?></p>
+                                    </div>
+                                    <hr>
+                                <?php endif; ?>
                                 <?php if (!empty($feedback['feedback'])) : ?>
                                     <div class="mb-3">
                                         <label class="form-label"><strong style="font-size: 1.5em;">Feedback:</strong></label>
                                         <p class="fs-5"><?= $feedback['feedback'] ?></p>
                                     </div>
+                                    <hr>    
                                 <?php endif; ?>
-                                <hr>
                                 <?php if (!empty($feedback['booking_feedback'])) : ?>
                                     <div class="mb-3">
                                         <label class="form-label"><strong style="font-size: 1.5em;">Booking Feedback:</strong></label>
@@ -155,8 +169,8 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                                             ?>
                                         </div>
                                     </div>
+                                    <hr>
                                 <?php endif; ?>
-                                <hr>
                                 <?php if (!empty($feedback['manpower_feedback'])) : ?>
                                     <div class="mb-3">
                                         <label class="form-label"><strong style="font-size: 1.5em;">Manpower Feedback:</strong></label>
@@ -177,6 +191,7 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                                             ?>
                                         </div>
                                     </div>
+                                    <hr>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
