@@ -17,13 +17,18 @@ require 'includes/admin_auth.php';
     <?php include("includes/admin_nav.php"); ?>
 
     <div class="container mt-5">
-        <h2>Add Service</h2>
+        <h2>Add Aircon</h2>
 
         <!-- Display error message if any -->
         <?php
         if (isset($_SESSION["error_message"])) {
             echo '<div class="alert alert-danger" role="alert">' . $_SESSION["error_message"] . '</div>';
             unset($_SESSION["error_message"]);
+        }
+            // Display success message if any
+        if (isset($_SESSION["success_message"])) {
+            echo '<div class="alert alert-success" role="alert">' . $_SESSION["success_message"] . '</div>';
+            unset($_SESSION["success_message"]);
         }
         ?>
 

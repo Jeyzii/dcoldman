@@ -47,20 +47,24 @@ $rowsPerPage = 5;
 // Get the current page
 $currentPendingPage = isset($_GET['pending_page']) ? (int)$_GET['pending_page'] : 1;
 $currentApprovedPage = isset($_GET['approved_page']) ? (int)$_GET['approved_page'] : 1;
+$currentDonePage = isset($_GET['done_page']) ? (int)$_GET['done_page'] : 1;
 
 // Calculate the offset for SQL queries
 $pendingOffset = ($currentPendingPage - 1) * $rowsPerPage;
 $approvedOffset = ($currentApprovedPage - 1) * $rowsPerPage;
+$doneOffset = ($currentDonePage - 1) * $rowsPerPage;
 
 // Query to retrieve pending bookings for the user in descending order
 $user_id = $_SESSION["user_id"];
 
 $pendingQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'Pending' OR status = 'resched') ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $pendingOffset";
 $approvedQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'Approved' AND user_approval = '1' AND management_approval = '1') ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $approvedOffset";
+$doneQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'done' AND user_approval = '1' AND management_approval = '1') ORDER BY booking_date DESC LIMIT $rowsPerPage OFFSET $doneOffset";
 
 
 $pendingResult = mysqli_query($conn, $pendingQuery);
 $approvedResult = mysqli_query($conn, $approvedQuery);
+$doneResult = mysqli_query($conn, $doneQuery);
 ?>
 
 <!DOCTYPE html>
@@ -202,6 +206,50 @@ $approvedResult = mysqli_query($conn, $approvedQuery);
                 echo ($approvedTotalPages > 1) ? generatePaginationLinks($currentApprovedPage, $approvedTotalPages, 'user_dashboard.php?approved_page') : '';
             } else {
                 echo '<p>No approved bookings found.</p>';
+            }
+            ?>
+        </div>
+
+                <!-- Done Bookings Section -->
+        <div class="mt-4">
+            <h3>Done Bookings</h3>
+            <?php
+            if ($doneResult && mysqli_num_rows($doneResult) > 0) {
+                echo '<table class="table">';
+                echo '<thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Address</th>
+                            <th>Special Request</th>
+                            <th style="width: 250px;">Estimated Wait Time (in minutes)</th><th>Status</th>
+                        </tr>
+                    </thead>';
+                echo '<tbody>';
+                while ($booking = mysqli_fetch_assoc($doneResult)) {
+                    echo '<tr>';
+                    echo '<td>' . $booking['booking_date'] . '</td>';
+                    echo '<td>' . $booking['booking_time'] . '</td>';
+                    echo '<td>' . $booking['service_type'] . '</td>';
+                    echo '<td>' . $booking['address'] . '</td>';
+                    echo '<td>' . $booking['special_request'] . '</td>';
+                    echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
+                    echo '<td class="text-success">' . $booking['status'] . '</td>';
+                    echo '</tr>';
+                }
+                echo '</tbody></table>';
+
+                // Display pagination links
+                $doneTotalPages = ceil(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM bookings 
+                                                                                WHERE user_id = '$user_id' 
+                                                                                AND status = 'done' 
+                                                                                AND user_approval = '1' 
+                                                                                AND management_approval = '1'")) / $rowsPerPage);
+
+                echo ($doneTotalPages > 1) ? generatePaginationLinks($currentDonePage, $doneTotalPages, 'user_dashboard.php?done_page') : '';
+            } else {
+                echo '<p>No done bookings found.</p>';
             }
             ?>
         </div>
