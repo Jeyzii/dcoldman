@@ -66,7 +66,15 @@ if ($result) {
 
                             foreach ($entries as $index => $entry) {
                                 // Determine the background color based on the availability status
-                                $bgColor = ($entry['status'] == 'available') ? 'bg-success' : 'bg-danger';
+                                $status = $entry['status'];
+
+                                if ($status == 'available') {
+                                    $bgColor = 'bg-success';
+                                } elseif ($status == 'not available') {
+                                    $bgColor = 'bg-danger';
+                                } elseif ($status == 'ongoing') {
+                                    $bgColor = 'bg-info';
+                                }
 
                                 // Format time to 12-hour format
                                 $formattedTime = date('g:i A', strtotime($entry['time_now']));

@@ -132,11 +132,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $bookingId = mysqli_insert_id($conn);
                         // query required manpower user
                         // Select the first available users with the role of 'manpower'
-                        $manpowerSelectionQuery = "SELECT user_id
-                                                        FROM users
-                                                        WHERE role = 'manpower'
-                                                        AND availability = 1
-                                                        LIMIT $requiredManpower FOR UPDATE"; // Lock rows for update
+                        $manpowerSelectionQuery = "SELECT user_id, name
+                                                            FROM users
+                                                            WHERE role = 'manpower'
+                                                            AND availability = 1
+                                                            LIMIT $requiredManpower FOR UPDATE"; // Lock rows for update
 
                         $manpowerSelectionResult = mysqli_query($conn, $manpowerSelectionQuery);
 
@@ -148,11 +148,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Iterate through the selected users
                         while ($user = mysqli_fetch_assoc($manpowerSelectionResult)) {
                             $userId = $user['user_id'];
-                            // update manpower availability and booking reference id
-                            $updateQuery = "UPDATE users SET availability = 2, booking_reference_id = $bookingId WHERE user_id = $userId";
+                            $userName = $user['name'];
+
+                            // Update manpower availability and booking reference id
+                            $updateQuery = "UPDATE users SET availability = 3, booking_reference_id = $bookingId WHERE user_id = $userId"; // Update manpower to ongoing
                             mysqli_query($conn, $updateQuery);
+
+                            // Insert into manpower_time_entries
+                            $insertQuery = "INSERT INTO manpower_time_entries (user_id, name, status, time_now) VALUES ('$userId', '$userName', 'ongoing', NOW())";
+                            mysqli_query($conn, $insertQuery);
                         }
-                        
+
                         //mail 
                         $mail = new PHPMailer(true);
                         //gmail

@@ -45,6 +45,9 @@ $feedbacksQuery = "SELECT f.name, f.feedback, f.feedback_id, f.user_id AS feedba
                     INNER JOIN users u ON f.user_id = u.user_id";
 
 $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
+if (!$feedbacksResult) {
+    die("Error in query: " . mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
@@ -127,7 +130,10 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                 <div class="col-lg-3 d-none d-lg-block"></div>
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
                     <div class="owl-carousel testimonial-carousel">
-                        <?php foreach ($feedbacksResult as $feedback) : ?>
+                        
+                        <?php 
+                        if (mysqli_num_rows($feedbacksResult) > 0) {
+                        foreach ($feedbacksResult as $feedback) : ?>
                             <div class="testimonial-item text-center">
                                 <h3><?= $feedback['name'] ?></h3>
                                 <hr>
@@ -194,7 +200,11 @@ $feedbacksResult = mysqli_query($conn, $feedbacksQuery);
                                     <hr>
                                 <?php endif; ?>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endforeach; 
+                        } else {
+                            echo "<h3 class='text-center' >No feedbacks at the moment.</h3>";
+                        }
+                        ?>
 
                     </div>
                 </div>

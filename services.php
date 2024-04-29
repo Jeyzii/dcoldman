@@ -56,7 +56,7 @@
     <!-- Service Start -->
     <!-- dynamic list - from table -->
     
-        <!-- <div class="container-xxl py-5">
+    <div class="container-xxl py-5"> 
         <div class="container">
             <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                 <h1 class="display-6 mb-5">We Provide professional Heating & Cooling Services</h1>
@@ -65,7 +65,7 @@
                 <?php foreach ($services as $service): ?>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="service-item">
-                        <img class="img-fluid" src="img/service-6.jpg" alt="service image">
+                        <!-- <img class="img-fluid" src="img/service-6.jpg" alt="service image"> -->
                             <div class="d-flex align-items-center bg-light">
                                 <div class="service-icon flex-shrink-0 bg-primary">
                                     <img class="img-fluid" src="img/icon/icon-06-light.png" alt="service icon">
@@ -77,10 +77,10 @@
                 <?php endforeach; ?>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Static -->
-    <div class="container-xxl py-5">
+    <!-- <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                 <h1 class="display-6 mb-5">We Provide professional Heating & Cooling Services</h1>
@@ -155,7 +155,7 @@
                 
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Service End -->
     
     <?php 

@@ -39,16 +39,20 @@
                                 break;
                             case 'manpower':
                                 echo '<li><a class="dropdown-item">Manpower Availability: </a></li>';
-                                echo '<form action="backend/update_availability.php" method="post">
-                                        <input type="hidden" name="user_id" value="' . $_SESSION['user_id'] . '">
-                                        <button type="submit" name="toggle_availability" class="dropdown-item ' . ($_SESSION['availability'] == 1 ? 'btn-success' : 'btn-danger') . '">
-                                            ' . ($_SESSION['availability'] == 1 ? 'Available' : 'Not Available') . '
-                                        </button>
-                                    </form><hr>';
+                                echo '<form action="backend/update_availability.php" method="post">';
+                                echo '<input type="hidden" name="user_id" value="' . $_SESSION['user_id'] . '">';
 
-                                echo '<li><a class="dropdown-item" href="manpower_dashboard.php">ManpowerDashboard</a></li>';
+                                if ($_SESSION['availability'] == 3) {
+                                    echo '<button class="dropdown-item" style="pointer-events: none; background-color: #FF800F;">Ongoing</button>';
+                                } else {
+                                    echo '<button type="submit" name="toggle_availability" class="dropdown-item ' . ($_SESSION['availability'] == 1 ? 'btn-success' : 'btn-danger') . '">';
+                                    echo ($_SESSION['availability'] == 1 ? 'Available' : 'Not Available');
+                                    echo '</button>';
+                                }
+                                echo '</form><hr>';
+
+                                echo '<li><a class="dropdown-item" href="manpower_dashboard.php">Manpower Dashboard</a></li>';
                                 break;
-
                             case 'staff':
                                 echo '<li><a class="dropdown-item" href="staff_dashboard.php">Staff Dashboard</a></li>';
                                 echo '<li><a class="dropdown-item" href="user_dashboard.php">User Dashboard</a></li>';
