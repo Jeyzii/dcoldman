@@ -65,6 +65,8 @@ $doneQuery = "SELECT * FROM bookings WHERE user_id = '$user_id' AND (status = 'd
 $pendingResult = mysqli_query($conn, $pendingQuery);
 $approvedResult = mysqli_query($conn, $approvedQuery);
 $doneResult = mysqli_query($conn, $doneQuery);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -221,8 +223,10 @@ $doneResult = mysqli_query($conn, $doneQuery);
                             <th>Date</th>
                             <th>Time</th>
                             <th>Service</th>
+                            <th>Aircon Type</th>
                             <th>Address</th>
                             <th>Special Request</th>
+                            <th>Total price</th>
                             <th style="width: 250px;">Estimated Wait Time (in minutes)</th><th>Status</th>
                         </tr>
                     </thead>';
@@ -232,8 +236,25 @@ $doneResult = mysqli_query($conn, $doneQuery);
                     echo '<td>' . $booking['booking_date'] . '</td>';
                     echo '<td>' . $booking['booking_time'] . '</td>';
                     echo '<td>' . $booking['service_type'] . '</td>';
+                    // Query to get the price of the service type
+                    $service_type = $booking['service_type'];
+                    $service_type_price_query = "SELECT price FROM air_condition_services WHERE service_name = '$service_type'";
+                    $service_type_price_result = mysqli_query($conn, $service_type_price_query);
+                    if ($service_type_price_result && $service_type_price_row = mysqli_fetch_assoc($service_type_price_result)) {
+                        $service_type_price = $service_type_price_row['price'];
+                    }
+
+                    echo '<td>' . $booking['aircon_type'] . '</td>';
+                    // Query to get the price of the aircon type
+                    $aircon_type = $booking['aircon_type'];
+                    $aircon_type_price_query = "SELECT price FROM aircon_types WHERE name = '$aircon_type'";
+                    $aircon_type_price_result = mysqli_query($conn, $aircon_type_price_query);
+                    if ($aircon_type_price_result && $aircon_type_price_row = mysqli_fetch_assoc($aircon_type_price_result)) {
+                        $aircon_type_price = $aircon_type_price_row['price'];
+                    }
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
+                    echo '<td>' . ((is_numeric($service_type_price) ? $service_type_price : 0) + (is_numeric($aircon_type_price) ? $aircon_type_price : 0)) . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td class="text-success">' . $booking['status'] . '</td>';
                     echo '</tr>';
