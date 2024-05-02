@@ -12,7 +12,7 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
     $bookingId = $_GET['booking_id'];
 
     // Get all users with role = 'manpower', availability = 2, and booking_reference_id of the booking
-    $manpowerQuery = "SELECT * FROM users WHERE role = 'manpower' AND availability = 2 AND booking_reference_id = '$bookingId'";
+    $manpowerQuery = "SELECT * FROM users WHERE role = 'manpower' AND availability = 3 AND booking_reference_id = '$bookingId'";
     $manpowerQueryResult = mysqli_query($conn, $manpowerQuery);
 
     if ($manpowerQueryResult) {
@@ -21,6 +21,10 @@ if (isset($_GET['booking_id']) && is_numeric($_GET['booking_id'])) {
             $userIdManpower = $row['user_id'];
             $updateQueryManpower = "UPDATE users SET availability = 1, booking_reference_id = NULL WHERE user_id = $userIdManpower";
             $updateResultManpower = mysqli_query($conn, $updateQueryManpower);
+
+            // Insert into manpower_time_entries
+            $insertQuery = "INSERT INTO manpower_time_entries (user_id, name, status, time_now) VALUES ('$userIdManpower', '$userNameManpower', 'available', NOW())";
+            mysqli_query($conn, $insertQuery);
             
             if (!$updateResultManpower) {
                 $_SESSION['error'] = "Error updating user: " . mysqli_error($conn);
