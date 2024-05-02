@@ -12,6 +12,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="staff_brand_management.php">
+                    Aircon Brands
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="staff_aircon_management.php">
                     Aircon Types
                 </a>

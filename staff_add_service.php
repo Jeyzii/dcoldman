@@ -45,7 +45,7 @@ require 'includes/staff_auth.php';
                 <label for="price" class="form-label">Price:</label>
                 <input type="text" class="form-control" id="price" name="price" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Service</button>
+            <button type="submit" class="btn btn-primary">Add Aircon Type</button>
         </form>
     </div>
 

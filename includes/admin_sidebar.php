@@ -17,6 +17,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="admin_brand_management.php">
+                    Aircon Brands
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="admin_manpower_availability_tracker.php">
                     Manpower Availability Tracker 
                 </a>
