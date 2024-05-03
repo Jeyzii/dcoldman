@@ -224,6 +224,7 @@ $doneResult = mysqli_query($conn, $doneQuery);
                             <th>Time</th>
                             <th>Service</th>
                             <th>Aircon Type</th>
+                            <th>Aircon Brand</th>
                             <th>Address</th>
                             <th>Special Request</th>
                             <th>Total price</th>
@@ -252,9 +253,17 @@ $doneResult = mysqli_query($conn, $doneQuery);
                     if ($aircon_type_price_result && $aircon_type_price_row = mysqli_fetch_assoc($aircon_type_price_result)) {
                         $aircon_type_price = $aircon_type_price_row['price'];
                     }
+                    echo '<td>' . $booking['aircon_brand'] . '</td>';
+                    // Query to get the price of the aircon type
+                    $aircon_brand = $booking['aircon_brand'];
+                    $aircon_brand_price_query = "SELECT price FROM aircon_brands WHERE brand = '$aircon_brand'";
+                    $aircon_brand_price_result = mysqli_query($conn, $aircon_brand_price_query);
+                    if ($aircon_brand_price_result && $aircon_brand_price_row = mysqli_fetch_assoc($aircon_brand_price_result)) {
+                        $aircon_brand_price = $aircon_brand_price_row['price'];
+                    }
                     echo '<td>' . $booking['address'] . '</td>';
                     echo '<td>' . $booking['special_request'] . '</td>';
-                    echo '<td>' . ((is_numeric($service_type_price) ? $service_type_price : 0) + (is_numeric($aircon_type_price) ? $aircon_type_price : 0)) . '</td>';
+                    echo '<td>' . ((is_numeric($service_type_price) ? $service_type_price : 0) + (is_numeric($aircon_type_price) ? $aircon_type_price : 0) + (is_numeric($aircon_brand_price) ? $aircon_brand_price : 0)) . '</td>';
                     echo '<td>' . $booking['eta'] . ' Min.' . '</td>';
                     echo '<td class="text-success">' . $booking['status'] . '</td>';
                     echo '</tr>';
