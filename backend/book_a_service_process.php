@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $booking_time = $_POST["booking_time"];
     $service_type = $_POST["service_type"];
     $aircon_type = $_POST["aircon_type"];
+    $aircon_brand = $_POST["aircon_brand"];
     $address = $_POST["address"];
     $special_request = $_POST["special_request"];
 
@@ -76,6 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $booking_time = mysqli_real_escape_string($conn, $booking_time);
         $service_type = mysqli_real_escape_string($conn, $service_type);
         $aircon_type = mysqli_real_escape_string($conn, $aircon_type);
+        $aircon_brand = mysqli_real_escape_string($conn, $aircon_brand);
         $address = mysqli_real_escape_string($conn, $address);
         $special_request = mysqli_real_escape_string($conn, $special_request);
 
@@ -85,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 AND booking_time = '$booking_time'
                                 AND service_type = '$service_type'
                                 AND aircon_type = '$aircon_type'
+                                AND aircon_brand = '$aircon_brand'
                                 AND status != 'Cancelled'
                                 AND status != 'reject'";
 
@@ -122,8 +125,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $eta = round($durationInSeconds / 60);
 
                     // Insert booking data into the database, including the calculated ETA
-                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, aircon_type, address, special_request, status, eta)
-                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$aircon_type', '$address', '$special_request', 'Pending', '$eta')";
+                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, aircon_type, aircon_brand ,address, special_request, status, eta)
+                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$aircon_type', '$aircon_brand','$address', '$special_request', 'Pending', '$eta')";
 
                     $result = mysqli_query($conn, $query);
                     // Check if the query was successful

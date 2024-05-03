@@ -9,7 +9,7 @@ require 'includes/admin_auth.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Aircon</title>
+    <title>Add Aircon Brand</title>
     <?php include("includes/head.php"); ?>
 </head>
 <body>
@@ -17,7 +17,7 @@ require 'includes/admin_auth.php';
     <?php include("includes/admin_nav.php"); ?>
 
     <div class="container mt-5">
-        <h2>Add Aircon</h2>
+        <h2>Add Aircon Brand</h2>
 
         <!-- Display error message if any -->
         <?php
@@ -32,21 +32,17 @@ require 'includes/admin_auth.php';
         }
         ?>
 
-        <!-- Aircon Add Form -->
-        <form action="backend/admin_add_aircon_process.php" method="post">
+        <!-- Aircon brand Add Form -->
+        <form action="backend/admin_add_brand_process.php" method="post">
             <div class="mb-3">
-                <label for="name" class="form-label">Aircon Type:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="info" class="form-label">Information:</label>
-                <textarea class="form-control" id="info" name="info" required></textarea>
+                <label for="brand" class="form-label">Aircon Brand:</label>
+                <input type="text" class="form-control" id="brand" name="brand" required>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>
                 <input type="text" class="form-control" id="price" name="price" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Aircon Type</button>
+            <button type="submit" class="btn btn-primary">Add Aircon Brand</button>
         </form>
     </div>
 

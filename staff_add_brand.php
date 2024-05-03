@@ -9,7 +9,7 @@ require 'includes/staff_auth.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Service</title>
+    <title>Add Aircon Brand</title>
     <?php include("includes/head.php"); ?>
 </head>
 <body>
@@ -17,7 +17,7 @@ require 'includes/staff_auth.php';
     <?php include("includes/staff_nav.php"); ?>
 
     <div class="container mt-5">
-        <h2>Add Service</h2>
+        <h2>Add Aircon Brand</h2>
 
         <!-- Display error message if any -->
         <?php
@@ -25,27 +25,24 @@ require 'includes/staff_auth.php';
             echo '<div class="alert alert-danger" role="alert">' . $_SESSION["error_message"] . '</div>';
             unset($_SESSION["error_message"]);
         }
+            // Display success message if any
+        if (isset($_SESSION["success_message"])) {
+            echo '<div class="alert alert-success" role="alert">' . $_SESSION["success_message"] . '</div>';
+            unset($_SESSION["success_message"]);
+        }
         ?>
 
-        <!-- Service Add Form -->
-        <form action="backend/staff_add_service_process.php" method="post">
+        <!-- Aircon brand Add Form -->
+        <form action="backend/staff_add_brand_process.php" method="post">
             <div class="mb-3">
-                <label for="service_name" class="form-label">Service Name:</label>
-                <input type="text" class="form-control" id="service_name" name="service_name" required>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <textarea class="form-control" id="description" name="description" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="total_manpower" class="form-label">Total Manpower:</label>
-                <input type="number" class="form-control" id="total_manpower" name="total_manpower" required>
+                <label for="brand" class="form-label">Aircon Brand:</label>
+                <input type="text" class="form-control" id="brand" name="brand" required>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>
                 <input type="text" class="form-control" id="price" name="price" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Aircon Type</button>
+            <button type="submit" class="btn btn-primary">Add Aircon Brand</button>
         </form>
     </div>
 

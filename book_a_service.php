@@ -18,12 +18,19 @@ $services_result = mysqli_query($conn, $services_query);
 $aircons_query = "SELECT * FROM aircon_types";
 $aircons_result = mysqli_query($conn, $aircons_query);
 
+$brands_query = "SELECT * FROM aircon_brands";
+$brands_result = mysqli_query($conn, $brands_query);
+
 // Check if the query was successful
 if (!$services_result) {
     die("Error: " . mysqli_error($conn));
 }
 
 if (!$aircons_result) {
+    die("Error: " . mysqli_error($conn));
+}
+
+if (!$brands_result) {
     die("Error: " . mysqli_error($conn));
 }
 ?>
@@ -162,7 +169,19 @@ if (!$aircons_result) {
                                     ?>
                                 </select>
                             </div>
-                            <div class="col-12 col-sm-12">
+                            <div class="col-12 col-sm-6">
+                                <label for="aircon_brand" class="form-label">Aircon Type:</label>
+                                <select class="form-select" id="aircon_brand" name="aircon_brand" required>
+                                    <option selected>Select Aircon Brand</option>
+                                    <?php
+                                    // Loop through the aircon brands and create options
+                                    while ($brand = mysqli_fetch_assoc($brands_result)) {
+                                        echo '<option value="' . $brand['brand'] . '">' . $brand['brand'] . ' - ₱' . $brand['price'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6">
                                 <label for="special_request" class="form-label">Special Request:</label>
                                 <textarea class="form-control" id="special_request" name="special_request" style="height: 17px;"></textarea>
                             </div>
