@@ -123,7 +123,18 @@
                                                             echo '<li><b>Aircon Type Price:</b> ' . $aircon_type_price . '</li>';
                                                         }
                                                     ?>
-                                                    <li><b>Total Amount:</b> <?php echo ($service_type_price ?? 0) + ($aircon_type_price ?? 0); ?></li>
+                                                    <li><b>Aircon Brand:</b> <?php echo $bookingData['aircon_brand']; ?> <i class="fas fa-wind"></i></li>
+                                                    <?php
+                                                        // Query to get the price of the aircon type
+                                                        $aircon_brand = $bookingData['aircon_brand'];
+                                                        $aircon_brand_price_query = "SELECT price FROM aircon_brands WHERE brand = '$aircon_brand'";
+                                                        $aircon_brand_price_result = mysqli_query($conn, $aircon_brand_price_query);
+                                                        if ($aircon_brand_price_result && $aircon_brand_price_row = mysqli_fetch_assoc($aircon_brand_price_result)) {
+                                                            $aircon_brand_price = $aircon_brand_price_row['price'];
+                                                            echo '<li><b>Aircon Type Price:</b> ' . $aircon_brand_price . '</li>';
+                                                        }
+                                                    ?>
+                                                    <li><b>Total Amount:</b> <?php echo ($service_type_price ?? 0) + ($aircon_type_price ?? 0) + ($aircon_brand_price ?? 0); ?></li>
                                                     <?php
                                                         // Query to get the info of the aircon type
                                                         $aircon_type = $bookingData['aircon_type'];
