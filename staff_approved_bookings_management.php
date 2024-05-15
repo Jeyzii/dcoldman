@@ -15,14 +15,17 @@ $offset = ($page - 1) * $recordsPerPage;
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>staff Dashboard</title>
     <?php include("includes/head.php"); ?>
     <!-- Include font-awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-d3L9/ATCV5T1OlCpG4IwPmOK51Gh3Ze9YucnN7Iuov1D1evSwMk/sFgU5X6j9kfo" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha384-d3L9/ATCV5T1OlCpG4IwPmOK51Gh3Ze9YucnN7Iuov1D1evSwMk/sFgU5X6j9kfo" crossorigin="anonymous">
 </head>
+
 <body>
     <!-- Navigation -->
     <?php include("includes/staff_nav.php"); ?>
@@ -53,6 +56,8 @@ $offset = ($page - 1) * $recordsPerPage;
                     echo '<tbody>';
 
                     while ($approvedBooking = mysqli_fetch_assoc($approvedBookingsResult)) {
+                        $isToday = $approvedBooking['booking_date'] == date("Y-m-d");
+
                         echo '<tr>';
                         echo '<td>' . $approvedBooking['booking_id'] . '</td>';
                         echo '<td>' . $approvedBooking['booker_name'] . '</td>';
@@ -61,10 +66,10 @@ $offset = ($page - 1) * $recordsPerPage;
                         echo '<td>' . $approvedBooking['address'] . '</td>';
                         echo '<td>' . $approvedBooking['booking_date'] . '</td>';
                         echo '<td>' . $approvedBooking['booking_time'] . '</td>';
-                        echo '<td>
-                        <a href="backend/staff_done_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-success btn-sm">Done</a>
-                        <a href="backend/staff_cancel_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>
-                        </td>';
+                        echo '<td>';
+                        echo '<a href="backend/staff_done_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-success btn-sm' . ($isToday ? '' : ' disabled') . '">Done</a>';
+                        echo '<a href="backend/staff_cancel_booking_process.php?booking_id=' . $approvedBooking['booking_id'] . '" class="btn btn-danger btn-sm">Cancel</a>';
+                        echo '</td>';
                         echo '</tr>';
                     }
 
@@ -96,4 +101,5 @@ $offset = ($page - 1) * $recordsPerPage;
     <?php include("includes/footer.php"); ?>
     <?php include("includes/scripts.php"); ?>
 </body>
+
 </html>
