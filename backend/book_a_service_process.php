@@ -57,8 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $manpowerAvailabilityQuery = "SELECT COUNT(*) AS available_manpower
                                     FROM users
-                                    WHERE role = 'manpower'
-                                    AND availability = 1";
+                                    WHERE role = 'manpower'";
 
     $manpowerAvailabilityResult = mysqli_query($conn, $manpowerAvailabilityQuery);
     $manpowerAvailabilityData = mysqli_fetch_assoc($manpowerAvailabilityResult);
@@ -125,9 +124,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $eta = round($durationInSeconds / 60);
 
                     // Insert booking data into the database, including the calculated ETA
-                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type, aircon_type, aircon_brand ,address, special_request, status, eta)
-                                VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type', '$aircon_type', '$aircon_brand','$address', '$special_request', 'Pending', '$eta')";
+                    $query = "INSERT INTO bookings (user_id, client_name, booking_date, booking_time, service_type,
+                    aircon_type, aircon_brand, address, special_request, status, eta)
+                    VALUES ('$user_id', '$client_name', '$booking_date', '$booking_time', '$service_type',
+                    '$aircon_type', '$aircon_brand', '$address', '$special_request', 'Pending', '$eta')";
 
+                    // Execute the first query
                     $result = mysqli_query($conn, $query);
                     // Check if the query was successful
                     if ($result) {  
@@ -138,29 +140,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $manpowerSelectionQuery = "SELECT user_id, name
                                                             FROM users
                                                             WHERE role = 'manpower'
-                                                            AND availability = 1
                                                             LIMIT $requiredManpower FOR UPDATE"; // Lock rows for update
 
                         $manpowerSelectionResult = mysqli_query($conn, $manpowerSelectionQuery);
 
                         // Check if there are available users
                         if (mysqli_num_rows($manpowerSelectionResult) < $requiredManpower) {
-                            throw new Exception("Insufficient available manpower.");
+                            $_SESSION['error'] = "Insufficient available manpower.";
+                            header("Location: ../book_a_service.php");
+                            exit;
                         }
 
                         // Iterate through the selected users
                         while ($user = mysqli_fetch_assoc($manpowerSelectionResult)) {
-                            $userId = $user['user_id'];
-                            $userName = $user['name'];
+                        $userId = $user['user_id'];
+                        $userName = $user['name'];
 
-                            // Update manpower availability and booking reference id
-                            $updateQuery = "UPDATE users SET availability = 3, booking_reference_id = $bookingId WHERE user_id = $userId"; // Update manpower to ongoing
-                            mysqli_query($conn, $updateQuery);
+                        // Update manpower availability and booking reference id
+                        $updateQuery = "UPDATE users SET availability = 2, booking_reference_id = $bookingId WHERE
+                        user_id = $userId"; // Update manpower to ongoing
+                        mysqli_query($conn, $updateQuery);
 
-                            // Insert into manpower_time_entries
-                            $insertQuery = "INSERT INTO manpower_time_entries (user_id, name, status, time_now) VALUES ('$userId', '$userName', 'ongoing', NOW())";
-                            mysqli_query($conn, $insertQuery);
+                        // Insert into manpower_time_entries
+                        $insertQuery = "INSERT INTO manpower_time_entries (user_id, name, status, time_now) VALUES
+                        ('$userId', '$userName', 'ongoing', NOW())";
+                        mysqli_query($conn, $insertQuery);
+
+                        // Check if there are any existing bookings for the current date and user_id in manpower_dispatch
+                        $checkExistingQuery = "SELECT * FROM manpower_dispatch WHERE booking_date = '$booking_date' AND
+                        manpower_id = '$userId'";
+                        $existingResult = mysqli_query($conn, $checkExistingQuery);
+
+                        $existingRow = mysqli_fetch_row($existingResult);
+                        var_dump($checkExistingQuery, $checkExistingQuery);
+                        if ($existingRow[0] > 0) {
+                                        $_SESSION['error'] = "Not enough manpower.";
+                                        header("Location: ../book_a_service.php");
+                                        exit;
+                        }else{
+                            // Second query to insert into manpower_dispatch table
+                            $query2 = "INSERT INTO manpower_dispatch (booking_id, booking_date,
+                            manpower_id) VALUES
+                            ('$bookingId', '$booking_date', '$userId')";
+
+                            // Execute the second query
+                            $result2 = mysqli_query($conn, $query2);
                         }
+                        }
+
 
                         //mail 
                         $mail = new PHPMailer(true);
