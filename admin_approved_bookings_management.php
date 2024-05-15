@@ -56,7 +56,7 @@ $offset = ($page - 1) * $recordsPerPage;
                     echo '<tbody>';
 
                     while ($approvedBooking = mysqli_fetch_assoc($approvedBookingsResult)) {
-                        $isToday = $approvedBooking['booking_date'] == date("Y-m-d");
+                        $isToday = $approvedBooking['booking_date'] > date("Y-m-d");
 
                         echo '<tr>';
                         echo '<td>' . $approvedBooking['booking_id'] . '</td>';
