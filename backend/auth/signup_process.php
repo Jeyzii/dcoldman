@@ -42,8 +42,8 @@ if (mysqli_query($conn, $sql)) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Port = 587 ;
-        $mail->Username = 'dcoldmandcdv@gmail.com';
-        $mail->Password = 'mffr qibt bkgb fdco';
+        $mail->Username = '';
+        $mail->Password = '';
 
         // Set sender and recipient
         $mail->setFrom("dcoldmandcdv@gmail.com", "Dcoldman");
